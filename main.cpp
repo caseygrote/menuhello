@@ -32,7 +32,7 @@ static void begin(){
 
 	for (CubeID cube : CubeSet::connected())
 	{
-		//LOG("cube  %d\n", (int)cube);
+		LOG("cube  %d\n", (int)cube);
 		auto &vid = v[cube];
 		vid.initMode(BG0);
 		vid.attach(cube);
@@ -47,75 +47,66 @@ void doit(Menu &m, struct MenuEvent &e)
 
 		switch (e.type){
 
-		case MENU_ITEM_PRESS:
-			m.anchor(e.item);
-			break;
+			case MENU_ITEM_PRESS:
+				m.anchor(e.item);
+				break;
 
-		case MENU_EXIT:
-			ASSERT(false);
-			break;
+			case MENU_EXIT:
+				ASSERT(false); 
+				break;
 
-		case MENU_NEIGHBOR_ADD:
-			LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
-				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			break;
+			case MENU_NEIGHBOR_ADD:
+				LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
+					e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
+				break;
+			
+			case MENU_NEIGHBOR_REMOVE:
+				LOG("lost cube %d on side %d of menu (neighbor's %d side)\n",
+					e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
+				break;
 
-		case MENU_NEIGHBOR_REMOVE:
-			LOG("lost cube %d on side %d of menu (neighbor's %d side)\n",
-				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			break;
+			case MENU_ITEM_ARRIVE:
+				LOG("arriving at menu item %d\n", e.item);
+				break;
 
-		case MENU_ITEM_ARRIVE:
-			LOG("arriving at menu item %d\n", e.item);
-			break;
+			case MENU_ITEM_DEPART:
+				//LOG("departing from menu item %d, scrolling %s\n", saveditem, e.direction > 0 ? "forward" : "backward");
+				break;
 
-		case MENU_ITEM_DEPART:
-			break;
+			case MENU_PREPAINT:
+				// do your implementation-specific drawing here
+				// NOTE: this event should never have its default handler skipped.
+				break;
 
-		case MENU_PREPAINT:
-			// do your implementation-specific drawing here
-			// NOTE: this event should never have its default handler skipped.
-			break;
-
-		case MENU_UNEVENTFUL:
-			ASSERT(false);
-			break;
+			case MENU_UNEVENTFUL:
+				ASSERT(false);
+				break;
 
 		}
-		m.performDefault();
-		//return NOT_SELECTED;
-	}else
-	{
-		ASSERT(e.type == MENU_EXIT);
-		m.performDefault();
-
-		LOG("Selected Game: %d\n", e.item);
-		//return e.item;
 	}
 }
 
 void main(){
-	LOG("begin");
+	
 	begin();
-	LOG("after begin");
 
 
 	struct MenuEvent e;
 
-
 	for (int i = 0; i < gNumCubesConnected; i++)
 	{
 		menus[i].init(v[i], &gAssets, gItems);
-		menus[i].anchor(i);
+		//menus[i].anchor(i);
 		
 	}
 
-	while (1){
-		for (int i = 0; i < gNumCubesConnected; i++){
-			doit(menus[i], events[i]);
-		}
+	while (true){
+		
+		//for (int i = 0; i < gNumCubesConnected; i++){
+		//	doit(menus[i], events[i]);
+		//}
 	}
-	
+
 	ASSERT(e.type == MENU_EXIT);
 	LOG("ABOUT TO DO SOME CRAZY SHITE");
 	//m.performDefault();
