@@ -8,6 +8,8 @@ using namespace Sifteo;
 static const unsigned gNumCubes = 3;
 static struct MenuItem gItems[] = { { &IconSBOL, &LabelChroma }, { &IconPromoter, &LabelSandwich }, { &IconPromoter, NULL }, { NULL, NULL } };
 static struct MenuAssets gAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
+static struct MenuItem hItems[] = { { &IconSBOL, &LabelSandwich }, { &IconSBOL, &LabelSandwich }, { &IconSBOL, NULL }, { NULL, NULL } };
+static struct MenuAssets hAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
 static Menu menus[gNumCubes];
 static VideoBuffer v[gNumCubes];
@@ -26,10 +28,11 @@ static Metadata M = Metadata()
 .icon(Icon)
 .cubeRange(gNumCubes);
 
-static void begin(){
-	//attach video buffers ?
-	
 
+/* BEGIN METHOD
+attaches video buffers to all connected cubes*/
+static void begin(){
+	//attach video buffers 	
 	for (CubeID cube : CubeSet::connected())
 	{
 		LOG("cube  %d\n", (int)cube);
@@ -41,12 +44,33 @@ static void begin(){
 	}
 }
 
+
+
+
+/*ADD CUBE METHOD
+events to fire when cube is neighboured; 
+paramters from doit are carried through*/
+void addCube(Menu &m, struct MenuEvent &e){
+	LOG("In the addCube method\n");
+	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
+		PCubeID addedCube = e.neighbor.neighbor;
+		menus[addedCube].init(v[addedCube], &hAssets, hItems);
+		//menus[addedCube].anchor(0);
+		//v[addedCube].touch();
+	}
+
+
+}
+
+/* DO IT METHOD
+handles event cases, takes in Menu and MenuEvent parameters*/
 void doit(Menu &m, struct MenuEvent &e)
 {
 	if (m.pollEvent(&e)){
 
 		switch (e.type){
 
+<<<<<<< HEAD
 			case MENU_ITEM_PRESS:
 				m.anchor(e.item);
 				break;
@@ -81,11 +105,51 @@ void doit(Menu &m, struct MenuEvent &e)
 			case MENU_UNEVENTFUL:
 				ASSERT(false);
 				break;
+=======
+		case MENU_ITEM_PRESS:
+			m.anchor(e.item);
+			break;
+
+		case MENU_EXIT:
+			ASSERT(false);
+			break;
+
+		case MENU_NEIGHBOR_ADD:
+			LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
+				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
+			addCube(m, e);
+			break;
+
+		case MENU_NEIGHBOR_REMOVE:
+			LOG("lost cube %d on side %d of menu (neighbor's %d side)\n",
+				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
+			break;
+
+		case MENU_ITEM_ARRIVE:
+			LOG("arriving at menu item %d\n", e.item);
+			break;
+
+		case MENU_ITEM_DEPART:
+			break;
+
+		case MENU_PREPAINT:
+			// do your implementation-specific drawing here
+			// NOTE: this event should never have its default handler skipped.
+			break;
+
+		case MENU_UNEVENTFUL:
+			ASSERT(false);
+			break;
+>>>>>>> cb00543910d11bbf4e6efb7ea94e7ec1c4ee1f7a
 
 		}
 	}
 }
 
+
+/* MAIN METHOD
+contains begin(), initializes the MenuEvent array, 
+initializes menus, & contains doit while loop*/
 void main(){
 	
 	begin();
@@ -96,8 +160,12 @@ void main(){
 	for (int i = 0; i < gNumCubesConnected; i++)
 	{
 		menus[i].init(v[i], &gAssets, gItems);
+<<<<<<< HEAD
 		//menus[i].anchor(i);
 		
+=======
+		menus[i].anchor(0);
+>>>>>>> cb00543910d11bbf4e6efb7ea94e7ec1c4ee1f7a
 	}
 
 	while (true){
@@ -108,7 +176,6 @@ void main(){
 	}
 
 	ASSERT(e.type == MENU_EXIT);
-	LOG("ABOUT TO DO SOME CRAZY SHITE");
 	//m.performDefault();
 
 	LOG("Selected Game: %d\n", e.item);
