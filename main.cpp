@@ -35,7 +35,7 @@ static void begin(){
 	//attach video buffers 	
 	for (CubeID cube : CubeSet::connected())
 	{
-		//LOG("cube  %d\n", (int)cube);
+		LOG("cube  %d\n", (int)cube);
 		auto &vid = v[cube];
 		vid.initMode(BG0);
 		vid.attach(cube);
@@ -102,15 +102,6 @@ void doit(Menu &m, struct MenuEvent &e)
 			break;
 
 		}
-		m.performDefault();
-		//return NOT_SELECTED;
-	}else
-	{
-		ASSERT(e.type == MENU_EXIT);
-		m.performDefault();
-
-		LOG("Selected Game: %d\n", e.item);
-		//return e.item;
 	}
 }
 
@@ -119,13 +110,12 @@ void doit(Menu &m, struct MenuEvent &e)
 contains begin(), initializes the MenuEvent array, 
 initializes menus, & contains doit while loop*/
 void main(){
+
 	LOG("begin\n");
 	begin();
 	LOG("after begin\n");
 
-
 	struct MenuEvent e;
-
 
 	for (int i = 0; i < gNumCubesConnected; i++)
 	{
@@ -133,12 +123,13 @@ void main(){
 		menus[i].anchor(0);
 	}
 
-	while (1){
-		for (int i = 0; i < gNumCubesConnected; i++){
-			doit(menus[i], events[i]);
-		}
+	while (true){
+		
+		//for (int i = 0; i < gNumCubesConnected; i++){
+		//	doit(menus[i], events[i]);
+		//}
 	}
-	
+
 	ASSERT(e.type == MENU_EXIT);
 	//m.performDefault();
 
