@@ -55,11 +55,7 @@ void addCube(Menu &m, struct MenuEvent &e){
 	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
 		PCubeID addedCube = e.neighbor.neighbor;
 		menus[addedCube].init(v[addedCube], &hAssets, hItems);
-		//menus[addedCube].anchor(0);
-		//v[addedCube].touch();
 	}
-
-
 }
 
 /* DO IT METHOD
@@ -123,9 +119,9 @@ void doit(Menu &m, struct MenuEvent &e)
 contains begin(), initializes the MenuEvent array, 
 initializes menus, & contains doit while loop*/
 void main(){
-	LOG("begin");
+	LOG("begin\n");
 	begin();
-	LOG("after begin");
+	LOG("after begin\n");
 
 
 	struct MenuEvent e;
