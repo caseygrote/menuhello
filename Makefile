@@ -1,4 +1,4 @@
-APP = menudemo
+APP = menuhello
 
 include $(SDK_DIR)/Makefile.defs
 
