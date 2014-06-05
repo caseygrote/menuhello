@@ -66,42 +66,6 @@ void doit(Menu &m, struct MenuEvent &e)
 
 		switch (e.type){
 
-<<<<<<< HEAD
-			case MENU_ITEM_PRESS:
-				m.anchor(e.item);
-				break;
-
-			case MENU_EXIT:
-				ASSERT(false); 
-				break;
-
-			case MENU_NEIGHBOR_ADD:
-				LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
-					e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-				break;
-			
-			case MENU_NEIGHBOR_REMOVE:
-				LOG("lost cube %d on side %d of menu (neighbor's %d side)\n",
-					e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-				break;
-
-			case MENU_ITEM_ARRIVE:
-				LOG("arriving at menu item %d\n", e.item);
-				break;
-
-			case MENU_ITEM_DEPART:
-				//LOG("departing from menu item %d, scrolling %s\n", saveditem, e.direction > 0 ? "forward" : "backward");
-				break;
-
-			case MENU_PREPAINT:
-				// do your implementation-specific drawing here
-				// NOTE: this event should never have its default handler skipped.
-				break;
-
-			case MENU_UNEVENTFUL:
-				ASSERT(false);
-				break;
-=======
 		case MENU_ITEM_PRESS:
 			m.anchor(e.item);
 			break;
@@ -136,7 +100,6 @@ void doit(Menu &m, struct MenuEvent &e)
 		case MENU_UNEVENTFUL:
 			ASSERT(false);
 			break;
->>>>>>> cb00543910d11bbf4e6efb7ea94e7ec1c4ee1f7a
 
 		}
 	}
@@ -147,27 +110,17 @@ void doit(Menu &m, struct MenuEvent &e)
 contains begin(), initializes the MenuEvent array, 
 initializes menus, & contains doit while loop*/
 void main(){
-<<<<<<< HEAD
+
 	LOG("begin\n");
 	begin();
 	LOG("after begin\n");
-=======
-	
-	begin();
->>>>>>> 06a9fc743f4ceeb57f006a031824ce0a494933d6
-
 
 	struct MenuEvent e;
 
 	for (int i = 0; i < gNumCubesConnected; i++)
 	{
 		menus[i].init(v[i], &gAssets, gItems);
-<<<<<<< HEAD
-		//menus[i].anchor(i);
-		
-=======
 		menus[i].anchor(0);
->>>>>>> cb00543910d11bbf4e6efb7ea94e7ec1c4ee1f7a
 	}
 
 	while (true){
