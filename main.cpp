@@ -102,8 +102,14 @@ void doit(Menu &m, struct MenuEvent &e)
 			break;
 
 		}
+		m.performDefault();
+	}
+	else {
+		ASSERT(e.type == MENU_EXIT);
+		m.performDefault();
 	}
 }
+
 
 
 /* MAIN METHOD
@@ -123,11 +129,11 @@ void main(){
 		menus[i].anchor(0);
 	}
 
-	while (true){
+	while (1){
 		
-		//for (int i = 0; i < gNumCubesConnected; i++){
-		//	doit(menus[i], events[i]);
-		//}
+		for (int i = 0; i < gNumCubesConnected; i++){
+			doit(menus[i], events[i]);
+		}
 	}
 
 	ASSERT(e.type == MENU_EXIT);
