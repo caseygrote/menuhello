@@ -1,0 +1,56 @@
+Promoters
+	Ecoli
+		Positive
+			BBa_I0500	Inducible pBad/araC promoter
+		Constitutive 
+			BBa_I14018	P(Bla)
+			BBa_I14033	P(Cat)
+		Negative
+			BBa_I1051	Lux cassette right promoter
+	Yeast
+		Positive 
+			BBa_J63006	yeast GAL1 promoter
+		Constitutive 
+			BBa_I766555	pCyc (Medium) Promoter
+		Negative
+			BBa_K950000	yeast fet3 promotor
+			BBa_K950002	yeast anb1 promotor
+RBS
+	Constitutive prokaryotic
+		BBa_J61100	TCTAGAGAAAGAGGGGACAAACTAGATG
+		BBa_J61101	TCTAGAGAAAGACAGGACCCACTAGATG
+	Riboregulators
+		BBa_J01010	TCTAGAGAACTAGAATCACCTCTTGGATTTGGGTATTAAAGAGGAGATACTAGATG	
+		BBa_J01080	TCTAGAGAACTAGAATCACCTCTTGCTTTTGGGTAAGAAAGAGGAGATACTAGATG	
+	Yeast 
+		BBa_J63003	cccgccgccaccatggag	designed yeast Kozak sequence
+		BBa_K165002	cccgccgccaccatggag	Kozak sequence (yeast RBS)
+CDS 
+	Reporters
+		Chromoproteins
+			BBa_K592009	amilCP, blue chromoprotein
+			BBa_K592011	cjBlue, green chromoprotein
+			BBa_K592012	eforRed, red chromoprotein
+		Fluorescent proteins
+			BBa_E0030	EYFP	enhanced yellow fluorescent protein 
+			BBa_E0020	ECFP	engineered cyan fluorescent
+	selection markers
+			BBa_K389005	 	Kanamycin resistance
+			BBa_J31005	CAT	chloramphenicol acetyltransferase
+Terminators
+	Ecoli
+		Forward
+			BBa_B0010	T1 from E. coli rrnB
+		Reverse
+			BBa_B0020	Terminator (Reverse B0010)
+		Bidirectional
+			BBa_B0011	LuxICDABEG (+/-)
+			BBa_B0014	double terminator (B0012-B0011)
+	Yeast
+		BBa_J63002	ADH1 terminator from S. cerevisiae
+		BBa_K110012	STE2 terminator
+	Eukaryotic
+		BBa_J52016	eukaryotic -- derived from SV40 early poly A signal sequence
+		BBa_J63002	ADH1 terminator from S. cerevisiae
+
+**these are not complete
