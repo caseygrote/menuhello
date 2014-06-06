@@ -2,11 +2,12 @@ Promoters
 	Ecoli
 		Positive
 			BBa_I0500	Inducible pBad/araC promoter
-		Constitutive 
+		Constitutive
 			BBa_I14018	P(Bla)
 			BBa_I14033	P(Cat)
 		Negative
 			BBa_I1051	Lux cassette right promoter
+		Multi-regulated
 	Yeast
 		Positive 
 			BBa_J63006	yeast GAL1 promoter
@@ -15,6 +16,8 @@ Promoters
 		Negative
 			BBa_K950000	yeast fet3 promotor
 			BBa_K950002	yeast anb1 promotor
+		Multi-regulated
+			BBa_I766200	pSte2
 RBS
 	Constitutive prokaryotic
 		BBa_J61100	TCTAGAGAAAGAGGGGACAAACTAGATG
@@ -22,10 +25,10 @@ RBS
 	Riboregulators
 		BBa_J01010	TCTAGAGAACTAGAATCACCTCTTGGATTTGGGTATTAAAGAGGAGATACTAGATG	
 		BBa_J01080	TCTAGAGAACTAGAATCACCTCTTGCTTTTGGGTAAGAAAGAGGAGATACTAGATG	
-	Yeast 
+	Yeast
 		BBa_J63003	cccgccgccaccatggag	designed yeast Kozak sequence
 		BBa_K165002	cccgccgccaccatggag	Kozak sequence (yeast RBS)
-CDS 
+CDS
 	Reporters
 		Chromoproteins
 			BBa_K592009	amilCP, blue chromoprotein
@@ -37,6 +40,13 @@ CDS
 	selection markers
 			BBa_K389005	 	Kanamycin resistance
 			BBa_J31005	CAT	chloramphenicol acetyltransferase
+	Transcriptional regulators
+		Activators
+			BBa_C0079	lasR-LVA	lasR activator from P. aeruginosa PAO1(+LVA)
+		Repressors
+			BBa_C0012	LacI	lacI repressor from E. coli (+LVA)	
+		Multiple
+			BBa_C0062	LuxR	luxR repressor/activator, (no LVA?)
 Terminators
 	Ecoli
 		Forward
