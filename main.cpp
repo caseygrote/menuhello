@@ -21,6 +21,8 @@ static unsigned gNumCubesConnected = CubeSet::connected().count();
 static AssetSlot MainSlot = AssetSlot::allocate()
 .bootstrap(BetterflowAssets);
 
+static TiltShakeRecognizer motion[gNumCubes]; //for keeping track of each cube's motion @ev
+
 
 static Metadata M = Metadata()
 .title("helo")
@@ -28,18 +30,42 @@ static Metadata M = Metadata()
 .icon(Icon)
 .cubeRange(gNumCubes);
 
+/*EVENTSENSOR CLASS
+based on codebase from LSU CCT*/
+class EventSensor{
+public:
+	void install(){
+		Events::cubeAccelChange.set(&EventSensor::onAccelChange, this);
+	}
+
+private:
+	void onAccelChange(unsigned id){
+		//CubeID cube(id); //is this creating a cube from the id? 
+		//i guess we don't need this? maybe this is for the packet msg?  @ev 
+
+		unsigned changeFlags = motion[id].update(); 
+		if (changeFlags){
+			if (motion[id].shake){
+				LOG("shakin");
+			}
+		}
+	}
+};
+
 
 /* BEGIN METHOD
 attaches video buffers to all connected cubes*/
-static void begin(){
-	//attach video buffers 	
+static void begin(){	
 	for (CubeID cube : CubeSet::connected())
 	{
 		LOG("cube  %d\n", (int)cube);
+		//attaching video buffers 
 		auto &vid = v[cube];
 		vid.initMode(BG0);
 		vid.attach(cube);
 		vid.bg0.erase(StripeTile);
+		//initializing and attaching motion recognizers 
+		motion[cube].attach(cube);
 
 	}
 }
@@ -50,9 +76,10 @@ static void begin(){
 /*ADD CUBE METHOD
 events to fire when cube is neighboured; 
 paramters from doit are carried through*/
-void addCube(Menu &m, struct MenuEvent &e){
+void addCube(Menu &m, struct MenuEvent &e, unsigned id){
 	LOG("In the addCube method\n");
 	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
+		CubeID(id).detachVideoBuffer();
 		PCubeID addedCube = e.neighbor.neighbor;
 		menus[addedCube].init(v[addedCube], &hAssets, hItems);
 	}
@@ -60,7 +87,7 @@ void addCube(Menu &m, struct MenuEvent &e){
 
 /* DO IT METHOD
 handles event cases, takes in Menu and MenuEvent parameters*/
-void doit(Menu &m, struct MenuEvent &e)
+void doit(Menu &m, struct MenuEvent &e, unsigned id)
 {
 	if (m.pollEvent(&e)){
 
@@ -77,7 +104,7 @@ void doit(Menu &m, struct MenuEvent &e)
 		case MENU_NEIGHBOR_ADD:
 			LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
 				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			addCube(m, e);
+			addCube(m, e, id);
 			break;
 
 		case MENU_NEIGHBOR_REMOVE:
@@ -121,6 +148,9 @@ void main(){
 	begin();
 	LOG("after begin\n");
 
+	static EventSensor event;
+	event.install();
+
 	struct MenuEvent e;
 
 	for (int i = 0; i < gNumCubesConnected; i++)
@@ -132,7 +162,7 @@ void main(){
 	while (1){
 		
 		for (int i = 0; i < gNumCubesConnected; i++){
-			doit(menus[i], events[i]);
+			doit(menus[i], events[i], i);
 		}
 	}
 
