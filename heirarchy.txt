@@ -37,7 +37,7 @@ CDS
 		Fluorescent proteins
 			BBa_E0030	EYFP	enhanced yellow fluorescent protein 
 			BBa_E0020	ECFP	engineered cyan fluorescent
-	selection markers
+	Selection markers
 			BBa_K389005	 	Kanamycin resistance
 			BBa_J31005	CAT	chloramphenicol acetyltransferase
 	Transcriptional regulators

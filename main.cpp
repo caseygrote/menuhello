@@ -9,6 +9,9 @@ static const unsigned gNumCubes = 3;
 static struct MenuItem topItems[] = { { &IconPromoter, &LabelPromoters }, { &IconRBS, &LabelRBS }, { &IconCDS, &LabelCDS }, { &IconTerminator, &LabelTerminators }, { NULL, NULL } };
 static struct MenuAssets gAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 static struct MenuItem promItems[] = { { &IconEcoli, &LabelEcoli }, { &IconYeast, &LabelYeast }, { NULL, NULL } };
+static struct MenuItem rbsItems[] = { { &IconConstitutiveProkaryoticRBS, &LabelConstitutiveProkaryoticRBS }, { &IconRiboregulators, &LabelRiboregulators }, { &IconYeast, &LabelYeast }, { NULL, NULL } };
+static struct MenuItem cdsItems[] = { { &IconReporters, &LabelReporters }, { &IconSelectionMarkers, &LabelSelectionMarkers }, { &IconTranscriptionalRegulators, &LabelTransciptionalRegulators } };
+static struct MenuItem termItems[] = { { &IconEcoli, &LabelEcoli }, { &IconYeast, &LabelYeast }, { &IconEukaryotic, &LabelEukaryotic } };
 static struct MenuAssets hAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
 static Menu menus[gNumCubes];
@@ -22,6 +25,8 @@ static AssetSlot MainSlot = AssetSlot::allocate()
 .bootstrap(BetterflowAssets);
 
 static TiltShakeRecognizer motion[gNumCubes]; //for keeping track of each cube's motion @ev
+static char currentScreen[gNumCubes]; //for keeping track of each cube's current screen @ev
+//sort of hacky/non-modular but it works for proof of concept @ev
 
 
 static Metadata M = Metadata()
@@ -48,6 +53,7 @@ private:
 			if (motion[id].shake){
 				LOG("SHAKING\n");
 				v[id].attach(id); //shaking gets rid of selected part (i.e. you can scroll menu again) @ev
+				menus[id].init(v[id], &gAssets, topItems); //brings you back to top level @ev
 			}
 		}
 	}
@@ -76,17 +82,32 @@ bool isSide(Side aSide){
 	return (aSide == RIGHT || aSide == LEFT);
 }
 
+void nextLevel(PCubeID addedCube, char current){
+	if (current == 'p'){
+		menus[addedCube].init(v[addedCube], &hAssets, promItems);
+	}
+	else if (current == 'r'){
+		menus[addedCube].init(v[addedCube], &hAssets, rbsItems);
+	}
+	else if (current == 'c'){
+		menus[addedCube].init(v[addedCube], &hAssets, cdsItems);
+	}
+	else {
+		menus[addedCube].init(v[addedCube], &hAssets, termItems);
+	}
+}
+
 
 
 /*ADD CUBE METHOD
 events to fire when cube is neighboured; 
 paramters from doit are carried through*/
-void addCube(Menu &m, struct MenuEvent &e, unsigned id){
+void addCube(Menu &m, struct MenuEvent &e, unsigned id, char current){
 	LOG("In the addCube method\n");
 	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
 		CubeID(id).detachVideoBuffer();
 		PCubeID addedCube = e.neighbor.neighbor;
-		menus[addedCube].init(v[addedCube], &hAssets, promItems);
+		nextLevel(addedCube, current);
 	}
 	//else if (isSide(e.neighbor.masterSide) && isSide(e.neighbor.neighborSide)){
 	//	CubeID(id).detachVideoBuffer();
@@ -112,7 +133,7 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 		case MENU_NEIGHBOR_ADD:
 			LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
 				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			addCube(m, e, id);
+			addCube(m, e, id, currentScreen[id]);
 			break;
 
 		case MENU_NEIGHBOR_REMOVE:
@@ -125,6 +146,23 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 
 		case MENU_ITEM_ARRIVE:
 			LOG("arriving at menu item %d\n", e.item);
+			//if statement for current screen array @ev
+			if (e.item == 0){
+				currentScreen[id] = 'p';
+				LOG("p\n");
+			}
+			else if (e.item == 1){
+				currentScreen[id] = 'r';
+				LOG("r\n");
+			}
+			else if (e.item == 2){
+				currentScreen[id] = 'c';
+				LOG("c\n");
+			}
+			else {
+				currentScreen[id] = 't';
+				LOG("t\n");
+			}
 			break;
 
 		case MENU_ITEM_DEPART:
@@ -168,6 +206,7 @@ void main(){
 	{
 		menus[i].init(v[i], &gAssets, topItems);
 		menus[i].anchor(0);
+		currentScreen[i] = 'p'; //proof of concept using char array; why is the string array so hard to invoke im so confused???????? @ev
 	}
 
 	while (1){
