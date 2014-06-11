@@ -47,7 +47,7 @@ private:
 		if (changeFlags){
 			if (motion[id].shake){
 				LOG("SHAKING\n");
-				v[id].attach(id);
+				v[id].attach(id); //shaking gets rid of selected part (i.e. you can scroll menu again) @ev
 			}
 		}
 	}
