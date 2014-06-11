@@ -27,6 +27,7 @@ static AssetSlot MainSlot = AssetSlot::allocate()
 static TiltShakeRecognizer motion[gNumCubes]; //for keeping track of each cube's motion @ev
 static char currentScreen[gNumCubes]; //for keeping track of each cube's current screen @ev
 //sort of hacky/non-modular but it works for proof of concept @ev
+typedef Array<char[], gNumCubes> currentSearch; //array of character arrays
 
 
 static Metadata M = Metadata()
