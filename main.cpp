@@ -6,9 +6,9 @@ using namespace Sifteo;
 
 
 static const unsigned gNumCubes = 3;
-static struct MenuItem gItems[] = {};
+static struct MenuItem gItems[] = { { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { NULL, NULL } };
 static struct MenuAssets gAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
-static struct MenuItem hItems[] = { };
+static struct MenuItem hItems[] = { { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { NULL, NULL } };
 static struct MenuAssets hAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
 static Menu menus[gNumCubes];
