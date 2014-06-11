@@ -10733,6 +10733,18 @@ extern const Sifteo::PinnedAssetImage StripeTile = {{
     /* pData    */ 1
 }};
 
+extern const uint16_t BgTile_data[];
+
+extern const Sifteo::PinnedAssetImage BgTile = {{
+    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
+    /* width    */ 1,
+    /* height   */ 1,
+    /* frames   */ 1,
+    /* format   */ _SYS_AIF_PINNED,
+    /* reserved */ 0,
+    /* pData    */ 0
+}};
+
 extern const uint16_t IconSBOL_data[];
 
 extern const Sifteo::AssetImage IconSBOL = {{
@@ -10752,6 +10764,25 @@ const uint16_t IconSBOL_data[] = {
     0xcbbd,0x7b9a,0x444e,0x2260,0xd986,0x8bc5,0x14e0,0x5306,
     0xcaa8,0x5eb1,0x002d,0x6554,0x43ab,0xb37d,0x542c,0x23af,
     0xdfea,0x0051,0x6554,0x59ab,0x6554,0x01ab,
+};
+
+extern const uint16_t LabelBidirectional_data[];
+
+extern const Sifteo::AssetImage LabelBidirectional = {{
+    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
+    /* width    */ 16,
+    /* height   */ 2,
+    /* frames   */ 1,
+    /* format   */ _SYS_AIF_FLAT,
+    /* reserved */ 0,
+    /* pData    */ reinterpret_cast<uintptr_t>(LabelBidirectional_data)
+}};
+
+const uint16_t LabelBidirectional_data[] = {
+    0x0000,0x0000,0x04ac,0x000a,0x060e,0x05cb,0x09c6,0x0701,
+    0x06f5,0x05cc,0x05e4,0x076e,0x0726,0x04ad,0x0000,0x0000,
+    0x0000,0x0000,0x04ae,0x09ee,0x09d7,0x05c0,0x0b12,0x000b,
+    0x0a59,0x08f5,0x0900,0x057c,0x000c,0x04af,0x0000,0x0000,
 };
 
 extern const uint16_t LabelCDS_data[];
@@ -10790,25 +10821,60 @@ const uint16_t LabelChromoproteins_data[] = {
     0x09d4,0x06a2,0x0901,0x0011,0x0882,0x057b,0x0012,0x0635,
 };
 
-extern const uint16_t Tip0_data[];
+extern const uint16_t LabelConsitutitive_data[];
 
-extern const Sifteo::AssetImage Tip0 = {{
+extern const Sifteo::AssetImage LabelConsitutitive = {{
+    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
+    /* width    */ 16,
+    /* height   */ 2,
+    /* frames   */ 1,
+    /* format   */ _SYS_AIF_FLAT,
+    /* reserved */ 0,
+    /* pData    */ reinterpret_cast<uintptr_t>(LabelConsitutitive_data)
+}};
+
+const uint16_t LabelConsitutitive_data[] = {
+    0x0000,0x0000,0x08d8,0x0b79,0x05f5,0x0771,0x0657,0x04b0,
+    0x04b1,0x04b2,0x04b0,0x0679,0x09c9,0x0636,0x0000,0x0000,
+    0x0000,0x0000,0x08df,0x0878,0x0902,0x057e,0x0013,0x0612,
+    0x0613,0x0786,0x0612,0x0014,0x0015,0x087f,0x0000,0x0000,
+};
+
+extern const uint16_t Tip1_data[];
+
+extern const Sifteo::AssetImage Tip1 = {{
     /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
     /* width    */ 16,
     /* height   */ 4,
     /* frames   */ 1,
     /* format   */ _SYS_AIF_DUB_I8,
     /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(Tip0_data)
+    /* pData    */ reinterpret_cast<uintptr_t>(Tip1_data)
 }};
 
-const uint16_t Tip0_data[] = {
+const uint16_t Tip1_data[] = {
     0x1500,0x4f54,0x3063,0xc530,0x0c19,0x60c6,0x9226,0x4589,
     0x0f35,0xfbc9,0x6c4d,0x72fd,0x832e,0xc385,0x061c,0x15f3,
     0x6e28,0x61ff,0x87ab,0xe68b,0x79a2,0x0c48,0xd754,0xbab2,
     0xd516,0x9cd5,0x14c1,0x3067,0xa818,0x40ec,0x5171,0xce1c,
     0x3365,0xbcb1,0xc3af,0x0c60,0xbbb6,0x7f39,0xc2cd,0x6e61,
     0x731a,0xc09c,0x270c,0x5c50,0x0034,
+};
+
+extern const uint16_t LabelEmpty_data[];
+
+extern const Sifteo::AssetImage LabelEmpty = {{
+    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
+    /* width    */ 16,
+    /* height   */ 2,
+    /* frames   */ 1,
+    /* format   */ _SYS_AIF_DUB_I8,
+    /* reserved */ 0,
+    /* pData    */ reinterpret_cast<uintptr_t>(LabelEmpty_data)
+}};
+
+const uint16_t LabelEmpty_data[] = {
+    0x0000,0x59a8,
 };
 
 extern const uint16_t Footer_data[];
@@ -10829,41 +10895,6 @@ const uint16_t Footer_data[] = {
     0x0c48,0xdf54,0xfab0,0xd506,0x9cd5,0x14c1,0x3067,0x9818,
     0xc589,0x1f04,0x7c13,0x130c,0x798b,0xc60c,0x0e70,0xc2c3,
     0x6e61,0x731a,0xc09c,0x270c,0x5c50,0x0034,
-};
-
-extern const uint16_t LabelEmpty_data[];
-
-extern const Sifteo::AssetImage LabelEmpty = {{
-    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 16,
-    /* height   */ 2,
-    /* frames   */ 1,
-    /* format   */ _SYS_AIF_DUB_I8,
-    /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(LabelEmpty_data)
-}};
-
-const uint16_t LabelEmpty_data[] = {
-    0x0000,0x59a8,
-};
-
-extern const uint16_t LabelBidirectional_data[];
-
-extern const Sifteo::AssetImage LabelBidirectional = {{
-    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 16,
-    /* height   */ 2,
-    /* frames   */ 1,
-    /* format   */ _SYS_AIF_FLAT,
-    /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(LabelBidirectional_data)
-}};
-
-const uint16_t LabelBidirectional_data[] = {
-    0x0000,0x0000,0x04ac,0x000a,0x060e,0x05cb,0x09c6,0x0701,
-    0x06f5,0x05cc,0x05e4,0x076e,0x0726,0x04ad,0x0000,0x0000,
-    0x0000,0x0000,0x04ae,0x09ee,0x09d7,0x05c0,0x0b12,0x000b,
-    0x0a59,0x08f5,0x0900,0x057c,0x000c,0x04af,0x0000,0x0000,
 };
 
 extern const uint16_t Tip2_data[];
@@ -10887,25 +10918,6 @@ const uint16_t Tip2_data[] = {
     0x731a,0xc09c,0x270c,0x5c50,0x0034,
 };
 
-extern const uint16_t LabelConsitutitive_data[];
-
-extern const Sifteo::AssetImage LabelConsitutitive = {{
-    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 16,
-    /* height   */ 2,
-    /* frames   */ 1,
-    /* format   */ _SYS_AIF_FLAT,
-    /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(LabelConsitutitive_data)
-}};
-
-const uint16_t LabelConsitutitive_data[] = {
-    0x0000,0x0000,0x08d8,0x0b79,0x05f5,0x0771,0x0657,0x04b0,
-    0x04b1,0x04b2,0x04b0,0x0679,0x09c9,0x0636,0x0000,0x0000,
-    0x0000,0x0000,0x08df,0x0878,0x0902,0x057e,0x0013,0x0612,
-    0x0613,0x0786,0x0612,0x0014,0x0015,0x087f,0x0000,0x0000,
-};
-
 extern const uint16_t LabelConstitutiveProkaryoticRBS_data[];
 
 extern const Sifteo::AssetImage LabelConstitutiveProkaryoticRBS = {{
@@ -10923,24 +10935,6 @@ const uint16_t LabelConstitutiveProkaryoticRBS_data[] = {
     0x04b3,0x067a,0x09ca,0x059b,0x0a1e,0x069c,0x05e5,0x0000,
     0x08e0,0x0016,0x0901,0x057d,0x0017,0x0614,0x09bf,0x0787,
     0x0614,0x0018,0x0019,0x062f,0x0684,0x06a2,0x0901,0x04b6,
-};
-
-extern const uint16_t LabelEcoli_data[];
-
-extern const Sifteo::AssetImage LabelEcoli = {{
-    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 16,
-    /* height   */ 2,
-    /* frames   */ 1,
-    /* format   */ _SYS_AIF_DUB_I8,
-    /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(LabelEcoli_data)
-}};
-
-const uint16_t LabelEcoli_data[] = {
-    0x0700,0x42a8,0x3f55,0xbd06,0xa9e7,0xd542,0x0617,0x0bff,
-    0x5e64,0x7673,0x599e,0xaacd,0x551f,0x99d8,0x5ee7,0xe2b0,
-    0x53cf,0x0005,
 };
 
 extern const uint16_t LabelEukaryotic_data[];
@@ -10962,25 +10956,22 @@ const uint16_t LabelEukaryotic_data[] = {
     0x55da,0x0000,
 };
 
-extern const uint16_t Tip1_data[];
+extern const uint16_t LabelEcoli_data[];
 
-extern const Sifteo::AssetImage Tip1 = {{
+extern const Sifteo::AssetImage LabelEcoli = {{
     /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
     /* width    */ 16,
-    /* height   */ 4,
+    /* height   */ 2,
     /* frames   */ 1,
     /* format   */ _SYS_AIF_DUB_I8,
     /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(Tip1_data)
+    /* pData    */ reinterpret_cast<uintptr_t>(LabelEcoli_data)
 }};
 
-const uint16_t Tip1_data[] = {
-    0x1500,0x4f54,0x3063,0xc530,0x0c19,0x60c6,0x9226,0x4589,
-    0x0f35,0xfbc9,0x6c4d,0x72fd,0x832e,0xc385,0x061c,0x15f3,
-    0x6e28,0x61ff,0x87ab,0xe68b,0x79a2,0x0c48,0xd754,0xbab2,
-    0xd516,0x9cd5,0x14c1,0x3067,0xa818,0x40ec,0x5171,0xce1c,
-    0x3365,0xbcb1,0xc3af,0x0c60,0xbbb6,0x7f39,0xc2cd,0x6e61,
-    0x731a,0xc09c,0x270c,0x5c50,0x0034,
+const uint16_t LabelEcoli_data[] = {
+    0x0700,0x42a8,0x3f55,0xbd06,0xa9e7,0xd542,0x0617,0x0bff,
+    0x5e64,0x7673,0x599e,0xaacd,0x551f,0x99d8,0x5ee7,0xe2b0,
+    0x53cf,0x0005,
 };
 
 extern const uint16_t LabelFluorescentProteins_data[];
@@ -12006,17 +11997,83 @@ const uint16_t IconBBa_J61100_data[] = {
     0x0152,
 };
 
-extern const uint16_t BgTile_data[];
+extern const uint16_t Tip0_data[];
 
-extern const Sifteo::PinnedAssetImage BgTile = {{
+extern const Sifteo::AssetImage Tip0 = {{
     /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 1,
-    /* height   */ 1,
+    /* width    */ 16,
+    /* height   */ 4,
     /* frames   */ 1,
-    /* format   */ _SYS_AIF_PINNED,
+    /* format   */ _SYS_AIF_DUB_I8,
     /* reserved */ 0,
-    /* pData    */ 0
+    /* pData    */ reinterpret_cast<uintptr_t>(Tip0_data)
 }};
+
+const uint16_t Tip0_data[] = {
+    0x1500,0x4f54,0x3063,0xc530,0x0c19,0x60c6,0x9226,0x4589,
+    0x0f35,0xfbc9,0x6c4d,0x72fd,0x832e,0xc385,0x061c,0x15f3,
+    0x6e28,0x61ff,0x87ab,0xe68b,0x79a2,0x0c48,0xd754,0xbab2,
+    0xd516,0x9cd5,0x14c1,0x3067,0xa818,0x40ec,0x5171,0xce1c,
+    0x3365,0xbcb1,0xc3af,0x0c60,0xbbb6,0x7f39,0xc2cd,0x6e61,
+    0x731a,0xc09c,0x270c,0x5c50,0x0034,
+};
+
+extern const uint16_t LabelBBa_K110012_data[];
+
+extern const Sifteo::AssetImage LabelBBa_K110012 = {{
+    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
+    /* width    */ 16,
+    /* height   */ 2,
+    /* frames   */ 1,
+    /* format   */ _SYS_AIF_FLAT,
+    /* reserved */ 0,
+    /* pData    */ reinterpret_cast<uintptr_t>(LabelBBa_K110012_data)
+}};
+
+const uint16_t LabelBBa_K110012_data[] = {
+    0x0000,0x0738,0x0a13,0x0476,0x0727,0x0000,0x0477,0x06c7,
+    0x06cc,0x0af0,0x0ae5,0x046c,0x06c7,0x0a5c,0x0bae,0x0000,
+    0x0000,0x06bb,0x09f1,0x0479,0x0023,0x0000,0x08b0,0x058a,
+    0x0557,0x0af1,0x0aec,0x046d,0x0551,0x0a29,0x0a26,0x0000,
+};
+
+extern const uint16_t LabelBBa_J52016_data[];
+
+extern const Sifteo::AssetImage LabelBBa_J52016 = {{
+    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
+    /* width    */ 16,
+    /* height   */ 2,
+    /* frames   */ 1,
+    /* format   */ _SYS_AIF_FLAT,
+    /* reserved */ 0,
+    /* pData    */ reinterpret_cast<uintptr_t>(LabelBBa_J52016_data)
+}};
+
+const uint16_t LabelBBa_J52016_data[] = {
+    0x0000,0x0000,0x054d,0x046b,0x0448,0x0726,0x0000,0x07ab,
+    0x0742,0x0bb1,0x046c,0x06c7,0x0c06,0x0a5f,0x0000,0x0000,
+    0x0000,0x0000,0x054e,0x09f0,0x09ef,0x000c,0x05bc,0x0a6a,
+    0x04a5,0x0a27,0x046d,0x0551,0x0a49,0x0a4b,0x0000,0x0000,
+};
+
+extern const uint16_t LabelBBa_J63002_data[];
+
+extern const Sifteo::AssetImage LabelBBa_J63002 = {{
+    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
+    /* width    */ 16,
+    /* height   */ 2,
+    /* frames   */ 1,
+    /* format   */ _SYS_AIF_FLAT,
+    /* reserved */ 0,
+    /* pData    */ reinterpret_cast<uintptr_t>(LabelBBa_J63002_data)
+}};
+
+const uint16_t LabelBBa_J63002_data[] = {
+    0x0000,0x0000,0x054d,0x046b,0x0448,0x0726,0x0000,0x0c05,
+    0x0a62,0x0b71,0x046c,0x0af3,0x047e,0x0bae,0x0000,0x0000,
+    0x0000,0x0000,0x054e,0x09f0,0x09ef,0x000c,0x05bc,0x0472,
+    0x0473,0x0474,0x046d,0x0afa,0x047f,0x0a26,0x0000,0x0000,
+};
 
 extern const uint16_t IconBBa_J61101_data[];
 
@@ -13040,63 +13097,6 @@ const uint16_t LabelBBa_B0014_data[] = {
     0x04a3,0x0492,0x0ae5,0x06cb,0x0acd,0x0000,0x0000,0x0000,
     0x0000,0x0000,0x04ae,0x09ee,0x09f2,0x003d,0x0000,0x062a,
     0x04a4,0x0494,0x0aec,0x0556,0x07d1,0x0558,0x0000,0x0000,
-};
-
-extern const uint16_t LabelBBa_K110012_data[];
-
-extern const Sifteo::AssetImage LabelBBa_K110012 = {{
-    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 16,
-    /* height   */ 2,
-    /* frames   */ 1,
-    /* format   */ _SYS_AIF_FLAT,
-    /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(LabelBBa_K110012_data)
-}};
-
-const uint16_t LabelBBa_K110012_data[] = {
-    0x0000,0x0738,0x0a13,0x0476,0x0727,0x0000,0x0477,0x06c7,
-    0x06cc,0x0af0,0x0ae5,0x046c,0x06c7,0x0a5c,0x0bae,0x0000,
-    0x0000,0x06bb,0x09f1,0x0479,0x0023,0x0000,0x08b0,0x058a,
-    0x0557,0x0af1,0x0aec,0x046d,0x0551,0x0a29,0x0a26,0x0000,
-};
-
-extern const uint16_t LabelBBa_J52016_data[];
-
-extern const Sifteo::AssetImage LabelBBa_J52016 = {{
-    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 16,
-    /* height   */ 2,
-    /* frames   */ 1,
-    /* format   */ _SYS_AIF_FLAT,
-    /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(LabelBBa_J52016_data)
-}};
-
-const uint16_t LabelBBa_J52016_data[] = {
-    0x0000,0x0000,0x054d,0x046b,0x0448,0x0726,0x0000,0x07ab,
-    0x0742,0x0bb1,0x046c,0x06c7,0x0c06,0x0a5f,0x0000,0x0000,
-    0x0000,0x0000,0x054e,0x09f0,0x09ef,0x000c,0x05bc,0x0a6a,
-    0x04a5,0x0a27,0x046d,0x0551,0x0a49,0x0a4b,0x0000,0x0000,
-};
-
-extern const uint16_t LabelBBa_J63002_data[];
-
-extern const Sifteo::AssetImage LabelBBa_J63002 = {{
-    /* group    */ reinterpret_cast<uintptr_t>(&BetterflowAssets),
-    /* width    */ 16,
-    /* height   */ 2,
-    /* frames   */ 1,
-    /* format   */ _SYS_AIF_FLAT,
-    /* reserved */ 0,
-    /* pData    */ reinterpret_cast<uintptr_t>(LabelBBa_J63002_data)
-}};
-
-const uint16_t LabelBBa_J63002_data[] = {
-    0x0000,0x0000,0x054d,0x046b,0x0448,0x0726,0x0000,0x0c05,
-    0x0a62,0x0b71,0x046c,0x0af3,0x047e,0x0bae,0x0000,0x0000,
-    0x0000,0x0000,0x054e,0x09f0,0x09ef,0x000c,0x05bc,0x0472,
-    0x0473,0x0474,0x046d,0x0afa,0x047f,0x0a26,0x0000,0x0000,
 };
 
 

@@ -6,9 +6,9 @@ using namespace Sifteo;
 
 
 static const unsigned gNumCubes = 3;
-static struct MenuItem gItems[] = { { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { NULL, NULL } };
+static struct MenuItem topItems[] = { { &IconPromoter, &LabelPromoters }, { &IconRBS, &LabelRBS }, { &IconCDS, &LabelCDS }, { &IconTerminator, &LabelTerminators }, { NULL, NULL } };
 static struct MenuAssets gAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
-static struct MenuItem hItems[] = { { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { &IconPromoter, &LabelPromoters }, { NULL, NULL } };
+static struct MenuItem promItems[] = { { &IconEcoli, &LabelEcoli }, { &IconYeast, &LabelYeast }, { NULL, NULL } };
 static struct MenuAssets hAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
 static Menu menus[gNumCubes];
@@ -86,7 +86,7 @@ void addCube(Menu &m, struct MenuEvent &e, unsigned id){
 	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
 		CubeID(id).detachVideoBuffer();
 		PCubeID addedCube = e.neighbor.neighbor;
-		menus[addedCube].init(v[addedCube], &hAssets, hItems);
+		menus[addedCube].init(v[addedCube], &hAssets, promItems);
 	}
 	//else if (isSide(e.neighbor.masterSide) && isSide(e.neighbor.neighborSide)){
 	//	CubeID(id).detachVideoBuffer();
@@ -118,6 +118,9 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 		case MENU_NEIGHBOR_REMOVE:
 			LOG("lost cube %d on side %d of menu (neighbor's %d side)\n",
 				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
+			if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
+				v[id].attach(id);
+			}
 			break;
 
 		case MENU_ITEM_ARRIVE:
@@ -163,7 +166,7 @@ void main(){
 
 	for (int i = 0; i < gNumCubesConnected; i++)
 	{
-		menus[i].init(v[i], &gAssets, gItems);
+		menus[i].init(v[i], &gAssets, topItems);
 		menus[i].anchor(0);
 	}
 
