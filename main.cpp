@@ -46,7 +46,8 @@ private:
 		unsigned changeFlags = motion[id].update(); 
 		if (changeFlags){
 			if (motion[id].shake){
-				LOG("shakin");
+				LOG("SHAKING\n");
+				v[id].attach(id);
 			}
 		}
 	}
@@ -70,6 +71,10 @@ static void begin(){
 	}
 }
 
+/*TOSIDE HELPER METHOD*/
+bool isSide(Side aSide){
+	return (aSide == RIGHT || aSide == LEFT);
+}
 
 
 
@@ -83,6 +88,9 @@ void addCube(Menu &m, struct MenuEvent &e, unsigned id){
 		PCubeID addedCube = e.neighbor.neighbor;
 		menus[addedCube].init(v[addedCube], &hAssets, hItems);
 	}
+	//else if (isSide(e.neighbor.masterSide) && isSide(e.neighbor.neighborSide)){
+	//	CubeID(id).detachVideoBuffer();
+	//}
 }
 
 /* DO IT METHOD
