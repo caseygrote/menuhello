@@ -10,8 +10,8 @@ static struct MenuItem topItems[] = { { &IconPromoter, &LabelPromoters }, { &Ico
 static struct MenuAssets gAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 static struct MenuItem promItems[] = { { &IconEcoli, &LabelEcoli }, { &IconYeast, &LabelYeast }, { NULL, NULL } };
 static struct MenuItem rbsItems[] = { { &IconConstitutiveProkaryoticRBS, &LabelConstitutiveProkaryoticRBS }, { &IconRiboregulators, &LabelRiboregulators }, { &IconYeast, &LabelYeast }, { NULL, NULL } };
-static struct MenuItem cdsItems[] = { { &IconReporters, &LabelReporters }, { &IconSelectionMarkers, &LabelSelectionMarkers }, { &IconTranscriptionalRegulators, &LabelTransciptionalRegulators } };
-static struct MenuItem termItems[] = { { &IconEcoli, &LabelEcoli }, { &IconYeast, &LabelYeast }, { &IconEukaryotic, &LabelEukaryotic } };
+static struct MenuItem cdsItems[] = { { &IconReporters, &LabelReporters }, { &IconSelectionMarkers, &LabelSelectionMarkers }, { &IconTranscriptionalRegulators, &LabelTransciptionalRegulators }, { NULL, NULL } };
+static struct MenuItem termItems[] = { { &IconEcoli, &LabelEcoli }, { &IconYeast, &LabelYeast }, { &IconEukaryotic, &LabelEukaryotic }, { NULL, NULL } };
 static struct MenuAssets hAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
 static Menu menus[gNumCubes];
