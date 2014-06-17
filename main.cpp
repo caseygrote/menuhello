@@ -2,6 +2,8 @@
 #include <sifteo.h>
 #include <sifteo/menu.h>
 #include "assets.gen.h"
+#include <tree.h>
+
 using namespace Sifteo;
 
 
@@ -193,6 +195,8 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 contains begin(), initializes the MenuEvent array, 
 initializes menus, & contains doit while loop*/
 void main(){
+	//TESTING CODE FOR TREE: 
+	Tree i;
 
 	LOG("begin\n");
 	begin();
