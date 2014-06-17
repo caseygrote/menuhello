@@ -38,6 +38,7 @@ static Metadata M = Metadata()
 .icon(Icon)
 .cubeRange(gNumCubes);
 
+
 /*EVENTSENSOR CLASS
 based on codebase from LSU CCT*/
 class EventSensor{
@@ -61,6 +62,8 @@ private:
 		}
 	}
 };
+
+
 
 /*TREE CLASS
 data structure for holding items*/
@@ -90,11 +93,12 @@ static void begin(){
 	}
 }
 
-/*TOSIDE HELPER METHOD*/
+/*TOSIDE HELPER METHOD: not currently used @ev*/
 bool isSide(Side aSide){
 	return (aSide == RIGHT || aSide == LEFT);
 }
 
+/*NEXT LEVEL HELPER METHOD*/
 void nextLevel(PCubeID addedCube, char current){
 	if (current == 'p'){
 		menus[addedCube].init(v[addedCube], &hAssets, promItems);
