@@ -2,7 +2,7 @@
 #include <sifteo.h>
 #include <sifteo/menu.h>
 #include "assets.gen.h"
-#include <tree.h>
+
 
 using namespace Sifteo;
 
@@ -62,6 +62,17 @@ private:
 	}
 };
 
+/*TREE CLASS
+data structure for holding items*/
+class Tree{
+public: 
+	MenuItem* items;
+	Tree();
+	Tree(MenuItem* itemList){
+		items = itemList;
+	}
+};
+
 
 /* BEGIN METHOD
 attaches video buffers to all connected cubes*/
@@ -76,7 +87,6 @@ static void begin(){
 		vid.bg0.erase(StripeTile);
 		//initializing and attaching motion recognizers 
 		motion[cube].attach(cube);
-
 	}
 }
 
@@ -196,7 +206,7 @@ contains begin(), initializes the MenuEvent array,
 initializes menus, & contains doit while loop*/
 void main(){
 	//TESTING CODE FOR TREE: 
-	Tree i;
+	Tree myFuck = Tree(topItems); 
 
 	LOG("begin\n");
 	begin();

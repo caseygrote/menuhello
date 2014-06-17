@@ -44,7 +44,7 @@ main.o: main.cpp \
   C:\Users\beast-jr\Desktop\TABULA_SIFTEO\sifteo-sdk-windows-v1.1.0-371-gaf55784\/include\sifteo/menu/public.h \
   C:\Users\beast-jr\Desktop\TABULA_SIFTEO\sifteo-sdk-windows-v1.1.0-371-gaf55784\/include\sifteo/menu/states.h \
   C:\Users\beast-jr\Desktop\TABULA_SIFTEO\sifteo-sdk-windows-v1.1.0-371-gaf55784\/include\sifteo/menu/events.h \
-  assets.gen.h tree.h
+  assets.gen.h
 
 C:\Users\beast-jr\Desktop\TABULA_SIFTEO\sifteo-sdk-windows-v1.1.0-371-gaf55784\/include\sifteo.h:
 
@@ -137,5 +137,3 @@ C:\Users\beast-jr\Desktop\TABULA_SIFTEO\sifteo-sdk-windows-v1.1.0-371-gaf55784\/
 C:\Users\beast-jr\Desktop\TABULA_SIFTEO\sifteo-sdk-windows-v1.1.0-371-gaf55784\/include\sifteo/menu/events.h:
 
 assets.gen.h:
-
-tree.h:
