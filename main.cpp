@@ -27,9 +27,12 @@ static AssetSlot MainSlot = AssetSlot::allocate()
 .bootstrap(BetterflowAssets);
 
 static TiltShakeRecognizer motion[gNumCubes]; //for keeping track of each cube's motion @ev
-static char currentScreen[gNumCubes]; //for keeping track of each cube's current screen @ev
+static unsigned currentScreen[gNumCubes]; //for keeping track of each cube's current screen @ev
 //sort of hacky/non-modular but it works for proof of concept @ev
 typedef Array<char[], gNumCubes> currentSearch; //array of character arrays
+
+static const unsigned numTrees = 5;
+
 
 
 static Metadata M = Metadata()
@@ -69,11 +72,41 @@ private:
 data structure for holding items*/
 class Tree{
 public: 
-	MenuItem* items;
-	Tree();
-	Tree(MenuItem* itemList){
+	Tree(){};
+	Tree(MenuItem* itemList, MenuAssets* assetList, unsigned levelInt){
+		items = itemList;
+		level = levelInt;
+		assets = assetList;
+	}
+
+	void setChildren(Tree* kiddies){
+		children = kiddies;
+	}
+
+	Tree* getChildren(){
+		return children;
+	}
+
+	void setAssets(MenuAssets* assetList){
+		assets = assetList;
+	}
+
+	MenuAssets* getAssets(){
+		return assets;
+	}
+
+	void setMenu(MenuItem* itemList){
 		items = itemList;
 	}
+
+	MenuItem* getMenu(){
+		return items;
+	}
+private:
+	MenuItem* items;
+	MenuAssets* assets;
+	unsigned level;
+	Tree* children;
 };
 
 
@@ -98,7 +131,7 @@ bool isSide(Side aSide){
 	return (aSide == RIGHT || aSide == LEFT);
 }
 
-/*NEXT LEVEL HELPER METHOD*/
+/*NEXT LEVEL HELPER METHOD: not currently used @ev*/
 void nextLevel(PCubeID addedCube, char current){
 	if (current == 'p'){
 		menus[addedCube].init(v[addedCube], &hAssets, promItems);
@@ -114,6 +147,27 @@ void nextLevel(PCubeID addedCube, char current){
 	}
 }
 
+/*LEVEL HELPER METHOD
+uses tree structure instead of character array*/
+void level(unsigned id, PCubeID addedCube, Tree* currentTree){
+	LOG("In level method\n");
+	unsigned screen = currentScreen[id];
+	Tree tr = currentTree[id];
+	Tree newtr = tr.getChildren()[screen];
+	menus[addedCube].init(v[addedCube], newtr.getAssets(), newtr.getMenu());
+}
+
+/* PLUS CUBE HELPER METHOD
+uses tree structure instead of character array; 
+fires when cube is neighboured*/
+void plusCube(unsigned id, struct MenuEvent e, Tree* currTree){
+	LOG("In the plusCube method\n");
+	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
+		CubeID(id).detachVideoBuffer();
+		PCubeID addedCube = e.neighbor.neighbor;
+		level(id, addedCube, currTree);
+	}
+}
 
 
 /*ADD CUBE METHOD
@@ -124,7 +178,7 @@ void addCube(Menu &m, struct MenuEvent &e, unsigned id, char current){
 	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
 		CubeID(id).detachVideoBuffer();
 		PCubeID addedCube = e.neighbor.neighbor;
-		nextLevel(addedCube, current);
+		//nextLevel(addedCube, current);
 	}
 	//else if (isSide(e.neighbor.masterSide) && isSide(e.neighbor.neighborSide)){
 	//	CubeID(id).detachVideoBuffer();
@@ -133,7 +187,7 @@ void addCube(Menu &m, struct MenuEvent &e, unsigned id, char current){
 
 /* DO IT METHOD
 handles event cases, takes in Menu and MenuEvent parameters*/
-void doit(Menu &m, struct MenuEvent &e, unsigned id)
+void doit(Menu &m, struct MenuEvent &e, unsigned id, Tree* currTree)
 {
 	if (m.pollEvent(&e)){
 
@@ -150,7 +204,8 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 		case MENU_NEIGHBOR_ADD:
 			LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
 				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			addCube(m, e, id, currentScreen[id]);
+			//addCube(m, e, id, currentScreen[id]);
+			plusCube(id, e, currTree);
 			break;
 
 		case MENU_NEIGHBOR_REMOVE:
@@ -163,23 +218,24 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 
 		case MENU_ITEM_ARRIVE:
 			LOG("arriving at menu item %d\n", e.item);
+			currentScreen[id] = e.item;
 			//if statement for current screen array @ev
-			if (e.item == 0){
-				currentScreen[id] = 'p';
-				LOG("p\n");
-			}
-			else if (e.item == 1){
-				currentScreen[id] = 'r';
-				LOG("r\n");
-			}
-			else if (e.item == 2){
-				currentScreen[id] = 'c';
-				LOG("c\n");
-			}
-			else {
-				currentScreen[id] = 't';
-				LOG("t\n");
-			}
+			//if (e.item == 0){
+			//	//currentScreen[id] = 'p';
+			//	//LOG("p\n");
+			//}
+			//else if (e.item == 1){
+			//	//currentScreen[id] = 'r';
+			//	//LOG("r\n");
+			//}
+			//else if (e.item == 2){
+			//	//currentScreen[id] = 'c';
+			//	//LOG("c\n");
+			//}
+			//else {
+			//	//currentScreen[id] = 't';
+			//	//LOG("t\n");
+			//}
 			break;
 
 		case MENU_ITEM_DEPART:
@@ -204,17 +260,34 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 }
 
 
+/* ASSIGN TREES METHOD
+for assigning menus to tree objects*/
+void assign_Trees(Tree* treeArray){
+	treeArray[0] = Tree(topItems, &hAssets, 0);
+	Tree topArray[4];
+	treeArray[1] = Tree(promItems, &hAssets, 1);
+	treeArray[2] = Tree(rbsItems, &hAssets, 1);
+	treeArray[3] = Tree(cdsItems, &hAssets, 1);
+	treeArray[4] = Tree(termItems, &hAssets, 1);
+	for (int i = 0; i < 4; i++){
+		LOG("assigning top array");
+		topArray[i] = treeArray[i + 1];
+	}
+	treeArray[0].setChildren(topArray);
+}
+
 
 /* MAIN METHOD
 contains begin(), initializes the MenuEvent array, 
 initializes menus, & contains doit while loop*/
 void main(){
 	//TESTING CODE FOR TREE: 
-	Tree myFuck = Tree(topItems); 
+	static Tree treeItems[numTrees];
+	assign_Trees(treeItems);
+	static Tree currentTree[gNumCubes];
 
-	LOG("begin\n");
+
 	begin();
-	LOG("after begin\n");
 
 	static EventSensor event;
 	event.install();
@@ -225,13 +298,14 @@ void main(){
 	{
 		menus[i].init(v[i], &gAssets, topItems);
 		menus[i].anchor(0);
-		currentScreen[i] = 'p'; //proof of concept using char array; why is the string array so hard to invoke im so confused???????? @ev
+		currentTree[i] = treeItems[0];
+		//currentScreen[i] = 'p'; //proof of concept using char array; why is the string array so hard to invoke im so confused???????? @ev
 	}
 
 	while (1){
 		
 		for (int i = 0; i < gNumCubesConnected; i++){
-			doit(menus[i], events[i], i);
+			doit(menus[i], events[i], i, currentTree);
 		}
 	}
 
