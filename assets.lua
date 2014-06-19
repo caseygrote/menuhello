@@ -137,5 +137,6 @@ LabelBBa_J63002 = image{"PartsLabelsBBa_J63002.png"}
 LabelBBa_K110012 = image{"PartsLabelsBBa_K110012.png"}
 LabelBBa_J52016 = image{"PartsLabelsBBa_J52016.png"}
 LabelBBa_I766555 = image{"PartsLabelsBBa_I766555.png"}
+LabelBBa_J31005 = image{"PartsLabelsBBa_J31005.png"}
 
 NoMore = image{"NoMore.png"}

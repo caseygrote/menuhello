@@ -39,11 +39,7 @@ static struct MenuItem cdsTransMult[] = { { &IconBBa_C0062, &LabelBBa_C0062 }, {
 static struct MenuItem termEcFor[] = { { &IconBBa_B0010, &LabelBBa_B0010 }, { NULL, NULL } };
 static struct MenuItem termEcRev[] = { { &IconBBa_B0020, &LabelBBa_B0020 }, { NULL, NULL } };
 static struct MenuItem termEcBi[] = { { &IconBBa_B0011, &LabelBBa_B0011 }, { &IconBBa_B0014, &LabelBBa_B0014 }, { NULL, NULL } };
-
-
-
-static struct MenuAssets gAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
-static struct MenuAssets hAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
+static struct MenuAssets cubeAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
 static Menu menus[gNumCubes];
 static VideoBuffer v[gNumCubes];
@@ -89,7 +85,7 @@ private:
 			if (motion[id].shake){
 				LOG("SHAKING\n");
 				v[id].attach(id); //shaking gets rid of selected part (i.e. you can scroll menu again) @ev
-				menus[id].init(v[id], &gAssets, topItems); //brings you back to top level @ev
+				menus[id].init(v[id], &cubeAssets, topItems); //brings you back to top level @ev
 				//***************************************NEED TO FIGURE OUT HOW TO ASSIGN TREE AT THIS LEVEL @EV**************************************************************************
 			}
 		}
@@ -156,27 +152,6 @@ static void begin(){
 	}
 }
 
-/*TOSIDE HELPER METHOD: not currently used @ev*/
-bool isSide(Side aSide){
-	return (aSide == RIGHT || aSide == LEFT);
-}
-
-/*NEXT LEVEL HELPER METHOD: not currently used @ev*/
-void nextLevel(PCubeID addedCube, char current){
-	if (current == 'p'){
-		menus[addedCube].init(v[addedCube], &hAssets, promItems);
-	}
-	else if (current == 'r'){
-		menus[addedCube].init(v[addedCube], &hAssets, rbsItems);
-	}
-	else if (current == 'c'){
-		menus[addedCube].init(v[addedCube], &hAssets, cdsItems);
-	}
-	else {
-		menus[addedCube].init(v[addedCube], &hAssets, termItems);
-	}
-}
-
 /*LEVEL HELPER METHOD
 uses tree structure instead of character array*/
 void level(unsigned id, PCubeID addedCube, Tree* currentTree){
@@ -189,17 +164,12 @@ void level(unsigned id, PCubeID addedCube, Tree* currentTree){
 		menus[addedCube].init(v[addedCube], noMore.getAssets(), noMore.getMenu());
 		currentTree[addedCube] = noMore;
 	}
-	//else if (tr.getChildren()[screen] == (void*)0){
-	//	LOG("no child here\n");
-	//	Tree noMore = currentTree[gNumCubes];
-	//	menus[addedCube].init(v[addedCube], noMore.getAssets(), noMore.getMenu());
-	//	currentTree[addedCube] = noMore;
-	//}
 	else {
-		LOG("we here\n");
 		Tree newtr = tr.getChildren()[screen];
-		menus[addedCube].init(v[addedCube], newtr.getAssets(), newtr.getMenu());
-		currentTree[addedCube] = newtr;
+		if (currentTree[addedCube].getMenu() != newtr.getMenu()){
+			menus[addedCube].init(v[addedCube], newtr.getAssets(), newtr.getMenu());
+			currentTree[addedCube] = newtr;
+		}
 	}
 }
 
@@ -216,21 +186,6 @@ void plusCube(unsigned id, struct MenuEvent e, Tree* currTree){
 }
 
 
-/*ADD CUBE METHOD
-events to fire when cube is neighboured; 
-paramters from doit are carried through*/
-void addCube(Menu &m, struct MenuEvent &e, unsigned id, char current){
-	LOG("In the addCube method\n");
-	if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
-		CubeID(id).detachVideoBuffer();
-		PCubeID addedCube = e.neighbor.neighbor;
-		//nextLevel(addedCube, current);
-	}
-	//else if (isSide(e.neighbor.masterSide) && isSide(e.neighbor.neighborSide)){
-	//	CubeID(id).detachVideoBuffer();
-	//}
-}
-
 /* DO IT METHOD
 handles event cases, takes in Menu and MenuEvent parameters*/
 void doit(Menu &m, struct MenuEvent &e, unsigned id, Tree* currTree)
@@ -241,6 +196,10 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id, Tree* currTree)
 
 		case MENU_ITEM_PRESS:
 			m.anchor(e.item);
+			if (currTree[id].getChildren() == NULL){
+				CubeID(id).detachVideoBuffer();
+			}
+			LOG("MENU ITEM BEING PRESSED NAO\n");
 			break;
 
 		case MENU_EXIT:
@@ -250,7 +209,6 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id, Tree* currTree)
 		case MENU_NEIGHBOR_ADD:
 			LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
 				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			//addCube(m, e, id, currentScreen[id]);
 			plusCube(id, e, currTree);
 			break;
 
@@ -263,25 +221,8 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id, Tree* currTree)
 			break;
 
 		case MENU_ITEM_ARRIVE:
-			LOG("arriving at menu item %d\n", e.item);
+			//LOG("arriving at menu item %d\n", e.item);
 			currentScreen[id] = e.item;
-			//if statement for current screen array @ev
-			//if (e.item == 0){
-			//	//currentScreen[id] = 'p';
-			//	//LOG("p\n");
-			//}
-			//else if (e.item == 1){
-			//	//currentScreen[id] = 'r';
-			//	//LOG("r\n");
-			//}
-			//else if (e.item == 2){
-			//	//currentScreen[id] = 'c';
-			//	//LOG("c\n");
-			//}
-			//else {
-			//	//currentScreen[id] = 't';
-			//	//LOG("t\n");
-			//}
 			break;
 
 		case MENU_ITEM_DEPART:
@@ -294,6 +235,7 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id, Tree* currTree)
 
 		case MENU_UNEVENTFUL:
 			ASSERT(false);
+			LOG("MENU ITEM UNEVENTFUL??\n");
 			break;
 
 		}
@@ -310,50 +252,50 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id, Tree* currTree)
 for assigning menus to tree objects*/
 void assign_Trees(Tree* treeArray){
 	//LEVEL 0
-	treeArray[0] = Tree(topItems, &hAssets, 0);
-	treeArray[31] = Tree(noItems, &hAssets, 0);
+	treeArray[0] = Tree(topItems, &cubeAssets, 0);
+	treeArray[31] = Tree(noItems, &cubeAssets, 0);
 
 	//LEVEL 1
-	treeArray[1] = Tree(promItems, &hAssets, 1);
-	treeArray[2] = Tree(rbsItems, &hAssets, 1);
-	treeArray[3] = Tree(cdsItems, &hAssets, 1);
-	treeArray[4] = Tree(termItems, &hAssets, 1);
+	treeArray[1] = Tree(promItems, &cubeAssets, 1);
+	treeArray[2] = Tree(rbsItems, &cubeAssets, 1);
+	treeArray[3] = Tree(cdsItems, &cubeAssets, 1);
+	treeArray[4] = Tree(termItems, &cubeAssets, 1);
 
 	//LEVEL 2
-	treeArray[5] = Tree(promEcoliYeast, &hAssets, 2);
-	treeArray[6] = Tree(promEcoliYeast, &hAssets, 2);
+	treeArray[5] = Tree(promEcoliYeast, &cubeAssets, 2);
+	treeArray[6] = Tree(promEcoliYeast, &cubeAssets, 2);
 
-	treeArray[7] = Tree(rbsConst, &hAssets, 2);
-	treeArray[8] = Tree(rbsRibo, &hAssets, 2);
-	treeArray[9] = Tree(rbsYeast, &hAssets, 2);
+	treeArray[7] = Tree(rbsConst, &cubeAssets, 2);
+	treeArray[8] = Tree(rbsRibo, &cubeAssets, 2);
+	treeArray[9] = Tree(rbsYeast, &cubeAssets, 2);
 
-	treeArray[10] = Tree(cdsReport, &hAssets, 2);
-	treeArray[11] = Tree(cdsSelect, &hAssets, 2);
-	treeArray[12] = Tree(cdsTrans, &hAssets, 2);
+	treeArray[10] = Tree(cdsReport, &cubeAssets, 2);
+	treeArray[11] = Tree(cdsSelect, &cubeAssets, 2);
+	treeArray[12] = Tree(cdsTrans, &cubeAssets, 2);
 
-	treeArray[13] = Tree(termEcoli, &hAssets, 2);
-	treeArray[14] = Tree(termYeast, &hAssets, 2);
-	treeArray[15] = Tree(termEuk, &hAssets, 2);
+	treeArray[13] = Tree(termEcoli, &cubeAssets, 2);
+	treeArray[14] = Tree(termYeast, &cubeAssets, 2);
+	treeArray[15] = Tree(termEuk, &cubeAssets, 2);
 
 	//LEVEL 3
-	treeArray[16] = Tree(promEcPos, &hAssets, 3);
-	treeArray[17] = Tree(promEcConst, &hAssets, 3);
-	treeArray[18] = Tree(promEcNeg, &hAssets, 3);
+	treeArray[16] = Tree(promEcPos, &cubeAssets, 3);
+	treeArray[17] = Tree(promEcConst, &cubeAssets, 3);
+	treeArray[18] = Tree(promEcNeg, &cubeAssets, 3);
 
-	treeArray[19] = Tree(promYePos, &hAssets, 3);
-	treeArray[20] = Tree(promYeConst, &hAssets, 3);
-	treeArray[21] = Tree(promYeNeg, &hAssets, 3);
-	treeArray[22] = Tree(promYeMulti, &hAssets, 3);
+	treeArray[19] = Tree(promYePos, &cubeAssets, 3);
+	treeArray[20] = Tree(promYeConst, &cubeAssets, 3);
+	treeArray[21] = Tree(promYeNeg, &cubeAssets, 3);
+	treeArray[22] = Tree(promYeMulti, &cubeAssets, 3);
 
-	treeArray[23] = Tree(cdsRepChromo, &hAssets, 3);
-	treeArray[24] = Tree(cdsRepFluor, &hAssets, 3);
-	treeArray[25] = Tree(cdsTransAct, &hAssets, 3);
-	treeArray[26] = Tree(cdsTransRep, &hAssets, 3);
-	treeArray[27] = Tree(cdsTransMult, &hAssets, 3);
+	treeArray[23] = Tree(cdsRepChromo, &cubeAssets, 3);
+	treeArray[24] = Tree(cdsRepFluor, &cubeAssets, 3);
+	treeArray[25] = Tree(cdsTransAct, &cubeAssets, 3);
+	treeArray[26] = Tree(cdsTransRep, &cubeAssets, 3);
+	treeArray[27] = Tree(cdsTransMult, &cubeAssets, 3);
 
-	treeArray[28] = Tree(termEcFor, &hAssets, 3);
-	treeArray[29] = Tree(termEcRev, &hAssets, 3);
-	treeArray[30] = Tree(termEcBi, &hAssets, 3);
+	treeArray[28] = Tree(termEcFor, &cubeAssets, 3);
+	treeArray[29] = Tree(termEcRev, &cubeAssets, 3);
+	treeArray[30] = Tree(termEcBi, &cubeAssets, 3);
 
 	//setting level 3 children
 	Tree promEcoliArray[4];
@@ -443,7 +385,7 @@ void main(){
 
 	for (int i = 0; i < gNumCubesConnected; i++)
 	{
-		menus[i].init(v[i], &gAssets, topItems);
+		menus[i].init(v[i], &cubeAssets, topItems);
 		menus[i].anchor(0);
 		currentTree[i] = treeItems[0];
 		//currentScreen[i] = 'p'; //proof of concept using char array; why is the string array so hard to invoke im so confused???????? @ev
