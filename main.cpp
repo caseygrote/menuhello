@@ -183,19 +183,23 @@ void level(unsigned id, PCubeID addedCube, Tree* currentTree){
 	LOG("In level method\n");
 	unsigned screen = currentScreen[id];
 	Tree tr = currentTree[id];
-	if (tr.getChildren() == NULL){
+	if (tr.getChildren() == NULL) {
 		LOG("NO CHILDREN\n");
 		Tree noMore = currentTree[gNumCubes];
 		menus[addedCube].init(v[addedCube], noMore.getAssets(), noMore.getMenu());
 		currentTree[addedCube] = noMore;
 	}
+	//else if (tr.getChildren()[screen] == (void*)0){
+	//	LOG("no child here\n");
+	//	Tree noMore = currentTree[gNumCubes];
+	//	menus[addedCube].init(v[addedCube], noMore.getAssets(), noMore.getMenu());
+	//	currentTree[addedCube] = noMore;
+	//}
 	else {
+		LOG("we here\n");
 		Tree newtr = tr.getChildren()[screen];
 		menus[addedCube].init(v[addedCube], newtr.getAssets(), newtr.getMenu());
 		currentTree[addedCube] = newtr;
-		if (newtr.getChildren() == NULL){
-			LOG("NO CHILDREN FO REAL\n");
-		}
 	}
 }
 
@@ -352,30 +356,37 @@ void assign_Trees(Tree* treeArray){
 	treeArray[30] = Tree(termEcBi, &hAssets, 3);
 
 	//setting level 3 children
-	Tree promEcoliArray[3];
+	Tree promEcoliArray[4];
 	for (int i = 0; i < 3; i++){
 		promEcoliArray[i] = treeArray[i + 16];
 	}
+	promEcoliArray[3] = treeArray[31];
 	treeArray[5].setChildren(promEcoliArray);
 
-	Tree promYeastArray[3];
+	Tree promYeastArray[4];
 	promYeastArray[0] = treeArray[19];
-	promYeastArray[1] = treeArray[21];
-	promYeastArray[2] = treeArray[22];
+	promYeastArray[1] = treeArray[31];
+	//promYeastArray[1] = treeArray[20];
+	promYeastArray[2] = treeArray[21];
+	promYeastArray[3] = treeArray[22];
 	treeArray[6].setChildren(promYeastArray);
 
-	Tree cdsRepArray[4];
+	Tree cdsRepArray[2];
 	cdsRepArray[0] = treeArray[23];
 	cdsRepArray[1] = treeArray[24];
-	cdsRepArray[2] = treeArray[26];
-	cdsRepArray[3] = treeArray[27];
 	treeArray[10].setChildren(cdsRepArray);
+
+	Tree cdsTransArray[3];
+	cdsTransArray[0] = treeArray[31];
+	cdsTransArray[1] = treeArray[26];
+	cdsTransArray[2] = treeArray[27];
+	treeArray[12].setChildren(cdsTransArray);
 
 	Tree termEcArray[3];
 	termEcArray[0] = treeArray[28];
 	termEcArray[1] = treeArray[29];
 	termEcArray[2] = treeArray[30];
-	treeArray[13].setChildren(promYeastArray);
+	treeArray[13].setChildren(termEcArray);
 
 	//creating and setting promoter children 
 	Tree promArray[2];
@@ -392,9 +403,9 @@ void assign_Trees(Tree* treeArray){
 
 	//creating and setting cds children
 	Tree cdsArray[3];
-	for (int i = 0; i < 3; i++){
-		cdsArray[i] = treeArray[i + 10];
-	}
+	cdsArray[0] = treeArray[10];
+	cdsArray[1] = treeArray[11];
+	cdsArray[2] = treeArray[12];
 	treeArray[3].setChildren(cdsArray);
 
 	//creating and setting term children
@@ -402,7 +413,7 @@ void assign_Trees(Tree* treeArray){
 	for (int i = 0; i < 3; i++){
 		termArray[i] = treeArray[i + 13];
 	}
-	treeArray[3].setChildren(termArray);
+	treeArray[4].setChildren(termArray);
 
 	//creating & setting top level children
 	Tree topArray[4];
