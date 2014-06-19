@@ -28,12 +28,12 @@ static struct MenuItem promEcPos[] = { { &IconBBa_I0500, &LabelBBa_I0500 }, { NU
 static struct MenuItem promEcConst[] = { { &IconBBa_I14018, &LabelBBa_I14018 }, { &IconBBa_I14033, &LabelBBa_I14033 }, { NULL, NULL } };
 static struct MenuItem promEcNeg[] = { { &IconBBa_I1051, &LabelBBa_I1051 }, { NULL, NULL } };
 static struct MenuItem promYePos[] = { { &IconBBa_J63006, &LabelBBa_J63006 }, { NULL, NULL } };
-//static struct MenuItem promYeConst[] = { { &IconBBa_I766555, &LabelBBa_I766555 }, { NULL, NULL } };
+static struct MenuItem promYeConst[] = { { &IconBBa_I766555, &LabelBBa_I766555 }, { NULL, NULL } };
 static struct MenuItem promYeNeg[] = { { &IconBBa_K950000, &LabelBBa_K950000 }, { &IconBBa_K950002, &LabelBBa_K950002 }, { NULL, NULL } };
 static struct MenuItem promYeMulti[] = { { &IconBBa_I766200, &LabelBBa_I766200 }, { NULL, NULL } };
-static struct MenuItem cdsRepChromo[] = {/* { &IconBBa_K59002, &LabelBBa_K59002 }, */{ &IconBBa_K592011, &LabelBBa_K592011 }, { &IconBBa_K592012, &LabelBBa_K592012 }, { NULL, NULL } };
+static struct MenuItem cdsRepChromo[] = { { &IconBBa_K592009, &LabelBBa_K592009 }, { &IconBBa_K592011, &LabelBBa_K592011 }, { &IconBBa_K592012, &LabelBBa_K592012 }, { NULL, NULL } };
 static struct MenuItem cdsRepFluor[] = { { &IconBBa_E0030, &LabelBBa_E0030 }, { &IconBBa_E0020, &LabelBBa_E0020 }, { NULL, NULL } };
-//static struct MenuItem cdsTransAct[] = { { &IconBBa_C0079, &LabelBBa_C0079 }, { NULL, NULL } };
+static struct MenuItem cdsTransAct[] = { { &IconBBa_C0079, &LabelBBa_C0079 }, { NULL, NULL } };
 static struct MenuItem cdsTransRep[] = { { &IconBBa_C0012, &LabelBBa_C0012 }, { NULL, NULL } };
 static struct MenuItem cdsTransMult[] = { { &IconBBa_C0062, &LabelBBa_C0062 }, { NULL, NULL } };
 static struct MenuItem termEcFor[] = { { &IconBBa_B0010, &LabelBBa_B0010 }, { NULL, NULL } };
@@ -341,13 +341,13 @@ void assign_Trees(Tree* treeArray){
 	treeArray[18] = Tree(promEcNeg, &hAssets, 3);
 
 	treeArray[19] = Tree(promYePos, &hAssets, 3);
-	//treeArray[20] = Tree(promYeConst, &hAssets, 3);
+	treeArray[20] = Tree(promYeConst, &hAssets, 3);
 	treeArray[21] = Tree(promYeNeg, &hAssets, 3);
 	treeArray[22] = Tree(promYeMulti, &hAssets, 3);
 
 	treeArray[23] = Tree(cdsRepChromo, &hAssets, 3);
 	treeArray[24] = Tree(cdsRepFluor, &hAssets, 3);
-	//treeArray[25] = Tree(cdsTransAct, &hAssets, 3);
+	treeArray[25] = Tree(cdsTransAct, &hAssets, 3);
 	treeArray[26] = Tree(cdsTransRep, &hAssets, 3);
 	treeArray[27] = Tree(cdsTransMult, &hAssets, 3);
 
@@ -365,8 +365,7 @@ void assign_Trees(Tree* treeArray){
 
 	Tree promYeastArray[4];
 	promYeastArray[0] = treeArray[19];
-	promYeastArray[1] = treeArray[31];
-	//promYeastArray[1] = treeArray[20];
+	promYeastArray[1] = treeArray[20];
 	promYeastArray[2] = treeArray[21];
 	promYeastArray[3] = treeArray[22];
 	treeArray[6].setChildren(promYeastArray);
@@ -377,7 +376,7 @@ void assign_Trees(Tree* treeArray){
 	treeArray[10].setChildren(cdsRepArray);
 
 	Tree cdsTransArray[3];
-	cdsTransArray[0] = treeArray[31];
+	cdsTransArray[0] = treeArray[25];
 	cdsTransArray[1] = treeArray[26];
 	cdsTransArray[2] = treeArray[27];
 	treeArray[12].setChildren(cdsTransArray);
