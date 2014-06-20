@@ -62,8 +62,6 @@ static unsigned currentScreen[gNumCubes]; //for keeping track of each cube's cur
 //sort of hacky/non-modular but it works for proof of concept @ev
 typedef Array<char[], gNumCubes> currentSearch; //array of character arrays
 
-static const unsigned numTrees = 32;
-
 
 
 static Metadata M = Metadata()
@@ -99,49 +97,6 @@ private:
 };
 
 
-/*TREE CLASS
-data structure for holding items*/
-class Tree{
-public: 
-	Tree(){};
-	Tree(MenuItem* itemList, MenuAssets* assetList, unsigned levelInt){
-		items = itemList;
-		level = levelInt;
-		assets = assetList;
-	}
-
-	void setChildren(Tree* kiddies){
-		children = kiddies;
-	}
-
-	Tree* getChildren(){
-		return children;
-	}
-
-	void setAssets(MenuAssets* assetList){
-		assets = assetList;
-	}
-
-	MenuAssets* getAssets(){
-		return assets;
-	}
-
-	void setMenu(MenuItem* itemList){
-		items = itemList;
-	}
-
-	MenuItem* getMenu(){
-		return items;
-	}
-
-private:
-	MenuItem* items;
-	MenuAssets* assets;
-	unsigned level;
-	Tree* children;
-};
-
-
 /* BEGIN METHOD
 attaches video buffers to all connected cubes*/
 static void begin(){	
@@ -155,7 +110,6 @@ static void begin(){
 		vid.bg0.erase(StripeTile);
 		//initializing and attaching motion recognizers 
 		motion[cube].attach(cube);
-		//currentNode[cube] = nodeItems[0]; //attaching nodes @ev
 	}
 }
 
