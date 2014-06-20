@@ -90,7 +90,7 @@ private:
 				LOG("SHAKING\n");
 				v[id].attach(id); //shaking gets rid of selected part (i.e. you can scroll menu again) @ev
 				menus[id].init(v[id], &cubeAssets, topItems); //brings you back to top level @ev
-				//***************************************NEED TO FIGURE OUT HOW TO ASSIGN TREE AT THIS LEVEL @EV**************************************************************************
+				currentNode[id] = nodeItems[0]; //assigns top level node @ev
 			}
 		}
 	}
