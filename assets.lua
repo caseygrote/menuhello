@@ -126,7 +126,6 @@ LabelBBa_K592012 = image{"PartsLabelsBBa_K592012.png"}
 LabelBBa_E0030 = image{"PartsLabelsBBa_E0030.png"}
 LabelBBa_E0020 = image{"PartsLabelsBBa_E0020.png"}
 LabelBBa_K389005 = image{"PartsLabelsBBa_K389005.png"}
-LabelBBa_C0079 = image{"PartsLabelsBBa_C0079.png"}
 LabelBBa_C0012 = image{"PartsLabelsBBa_C0012.png"}
 LabelBBa_C0062 = image{"PartsLabelsBBa_C0062.png"}
 LabelBBa_B0010 = image{"PartsLabelsBBa_B0010.png"}

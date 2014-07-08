@@ -34,7 +34,7 @@ static struct MenuItem promYeNeg[] = { { &IconBBa_K950000, &LabelBBa_K950000 }, 
 static struct MenuItem promYeMulti[] = { { &IconBBa_I766200, &LabelBBa_I766200 }, { NULL, NULL } };
 static struct MenuItem cdsRepChromo[] = { { &IconBBa_K592009, &LabelBBa_K592009 }, { &IconBBa_K592011, &LabelBBa_K592011 }, { &IconBBa_K592012, &LabelBBa_K592012 }, { NULL, NULL } };
 static struct MenuItem cdsRepFluor[] = { { &IconBBa_E0030, &LabelBBa_E0030 }, { &IconBBa_E0020, &LabelBBa_E0020 }, { NULL, NULL } };
-static struct MenuItem cdsTransAct[] = { { &IconBBa_C0079, &LabelBBa_C0079 }, { NULL, NULL } };
+static struct MenuItem cdsTransAct[] = {/* { &IconBBa_C0079, &LabelBBa_C0079 }*/ { NULL, NULL } };
 static struct MenuItem cdsTransRep[] = { { &IconBBa_C0012, &LabelBBa_C0012 }, { NULL, NULL } };
 static struct MenuItem cdsTransMult[] = { { &IconBBa_C0062, &LabelBBa_C0062 }, { NULL, NULL } };
 static struct MenuItem termEcFor[] = { { &IconBBa_B0010, &LabelBBa_B0010 }, { NULL, NULL } };
@@ -92,7 +92,18 @@ private:
 				menus[id].init(v[id], &cubeAssets, topItems); //brings you back to top level @ev
 				currentNode[id] = nodeItems[0]; //assigns top level node @ev
 			}
+			else if (motion[id].Tilt_ZChange){
+				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0){
+					LOG("flipped\n");
+				}
+				else if (motion[id].tilt.z == 1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0){
+					LOG("flipped back\n");
+				}
+			}
 		}
+
+
+
 	}
 };
 
@@ -155,49 +166,58 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 
 		switch (e.type){
 
-		case MENU_ITEM_PRESS:
-			m.anchor(e.item);
-			/*if (currTree[id].getChildren() == NULL){
-				CubeID(id).detachVideoBuffer();
-			} */
-			LOG("MENU ITEM BEING PRESSED NAO\n");
-			break;
-
-		case MENU_EXIT:
-			ASSERT(false);
-			break;
-
-		case MENU_NEIGHBOR_ADD:
-			LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
-				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			plusCube(id, e);
-			break;
-
-		case MENU_NEIGHBOR_REMOVE:
-			LOG("lost cube %d on side %d of menu (neighbor's %d side)\n",
-				e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-			if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
-				v[id].attach(id);
+			{ case MENU_ITEM_PRESS:
+				m.anchor(e.item);
+				LOG("MENU ITEM BEING PRESSED NAO\n");
+				RGB565 red = Sifteo::RGB565::fromRGB((float)255, (float)0, (float)0);
+				v[id].colormap.setRange(&red, 0, 1);
+				Sifteo::System::paint();
+				break;
 			}
-			break;
 
-		case MENU_ITEM_ARRIVE:
-			//LOG("arriving at menu item %d\n", e.item);
-			currentScreen[id] = e.item;
-			break;
+			{
+			case MENU_EXIT:
+				ASSERT(false);
+				break;
+		}
 
-		case MENU_ITEM_DEPART:
-			break;
+			{case MENU_NEIGHBOR_ADD:
+				LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
+					e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
+				plusCube(id, e);
+				break;
 
-		case MENU_PREPAINT:
-			// do your implementation-specific drawing here
-			// NOTE: this event should never have its default handler skipped.
-			break;
+			}
 
-		case MENU_UNEVENTFUL:
-			ASSERT(false);
-			LOG("MENU ITEM UNEVENTFUL??\n");
-			break;
+			{case MENU_NEIGHBOR_REMOVE:
+				LOG("lost cube %d on side %d of menu (neighbor's %d side)\n",
+					e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
+				if (e.neighbor.masterSide == BOTTOM && e.neighbor.neighborSide == TOP){
+					v[id].attach(id);
+				}
+				break;
+			}
+
+			{case MENU_ITEM_ARRIVE:
+				//LOG("arriving at menu item %d\n", e.item);
+				currentScreen[id] = e.item;
+				break;
+			}
+
+			{case MENU_ITEM_DEPART:
+				break;
+			}
+
+			{case MENU_PREPAINT:
+				// do your implementation-specific drawing here
+				// NOTE: this event should never have its default handler skipped.
+				break;
+			}
+
+			{case MENU_UNEVENTFUL:
+				ASSERT(false);
+				break;
+			}
 
 		}
 		m.performDefault();
