@@ -95,10 +95,12 @@ private:
 				currentNode[id] = nodeItems[0]; //assigns top level node @ev
 			}
 			else if (motion[id].Tilt_ZChange){
-				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0){
+				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && !flipped[id]){
+					flipped[id] = true;
 					LOG("flipped\n");
 				}
-				else if (motion[id].tilt.z == 1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0){
+				else if (motion[id].tilt.z == 1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && flipped[id]){
+					flipped[id] = false;
 					LOG("flipped back\n");
 				}
 			}
@@ -169,7 +171,7 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 		switch (e.type){
 
 			{ case MENU_ITEM_PRESS:
-				LOG("MENU ITEM BEING PRESSED NAO\n");
+				//LOG("MENU ITEM BEING PRESSED NAO\n");
 				if (locked[id]){
 					menus[id].init(v[id], &cubeAssets, menus[gNumCubes].items);
 					Sifteo::AudioChannel(0).play(WaterDrop);
@@ -179,7 +181,7 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 				else {
 					static struct MenuAssets newAssets = { &StripeTile, &Footer, &LabelEmpty, { NULL } };
 					struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
-					LOG("item is: %d", e.item);
+					//LOG("item is: %d", e.item);
 					menus[gNumCubes].init(v[id], &cubeAssets, menus[id].items);
 					menus[id].init(v[id], &newAssets, newItems);
 					Sifteo::AudioChannel(0).play(WaterDrop);
