@@ -92,14 +92,14 @@ private:
 
 		unsigned changeFlags = motion[id].update(); 
 		if (changeFlags){
-			if (motion[id].shake){
+			if (motion[id].shake && !locked[id]){
 				LOG("SHAKING\n");
 				v[id].attach(id); //shaking gets rid of selected part (i.e. you can scroll menu again) @ev
 				menus[id].init(v[id], &cubeAssets, topItems); //brings you back to top level @ev
 				currentNode[id] = nodeItems[0]; //assigns top level node @ev
 			}
 			else if (motion[id].Tilt_ZChange){
-				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && !flipped[id]){
+				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && !flipped[id] && locked[id]){
 					flipped[id] = true;
 					LOG("flipped\n");
 					handleStack(id, 1);
@@ -114,18 +114,33 @@ private:
 	}
 
 	static void handleStack(CubeID flipped, int binary){
+		Node NoMore = currentNode[gNumCubes];
 		if (binary == 1){
 			stack[stackPointer] = flipped;
 			stackPointer++;
 		}
 		else {
-			if (flipped == stack[stackPointer]){
-				stackPointer--;
+			if (flipped == stack[stackPointer-1]){
+				if (stackPointer == 1){
+					LOG("bottom-most cube\n");
+					static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
+					struct MenuItem newItems[] = { menus[flipped].items[0], { NULL, NULL } };
+					menus[gNumCubes].init(v[flipped], &cubeAssets, menus[flipped].items);
+					menus[flipped].init(v[flipped], &newAssets, newItems);
+				}
+				else {
+					LOG("other cube\n");
+					stackPointer--;
+					menus[flipped].init(v[flipped], NoMore.getAssets(), NoMore.getMenu());
+					currentNode[flipped] = NoMore;
+				}
 			}
 			else {
 				stackPointer = 0;
 			}
+
 		}
+		LOG("stackPointer:%d\n", stackPointer);
 	}
 };
 
@@ -191,21 +206,24 @@ void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 		switch (e.type){
 
 			{ case MENU_ITEM_PRESS:
-				if (locked[id]){
-					menus[id].init(v[id], &cubeAssets, menus[gNumCubes].items);
-					Sifteo::AudioChannel(0).play(WaterDrop);
-					locked[id] = false;
-					break;
+				if (!flipped[id]){
+					if (locked[id]){
+						menus[id].init(v[id], &cubeAssets, menus[gNumCubes].items);
+						Sifteo::AudioChannel(0).play(WaterDrop);
+						locked[id] = false;
+						break;
+					}
+					else {
+						static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
+						struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
+						menus[gNumCubes].init(v[id], &cubeAssets, menus[id].items);
+						menus[id].init(v[id], &newAssets, newItems);
+						Sifteo::AudioChannel(0).play(WaterDrop);
+						locked[id] = true;
+						break;
+					}
 				}
-				else {
-					static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
-					struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
-					menus[gNumCubes].init(v[id], &cubeAssets, menus[id].items);
-					menus[id].init(v[id], &newAssets, newItems);
-					Sifteo::AudioChannel(0).play(WaterDrop);
-					locked[id] = true;
-					break;
-				}
+				break;
 			}
 
 			{
