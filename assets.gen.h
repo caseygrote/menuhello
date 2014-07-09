@@ -6,24 +6,22 @@
 
 #pragma once
 
-extern Sifteo::AssetGroup IconAssets;
-extern const Sifteo::AssetImage Icon;
 extern Sifteo::AssetGroup BetterflowAssets;
 extern const Sifteo::AssetImage Tip0;
-extern const Sifteo::AssetImage IconSBOL;
-extern const Sifteo::AssetImage LabelChromoproteins;
-extern const Sifteo::AssetImage LabelConstitutiveProkaryoticRBS;
-extern const Sifteo::AssetImage LabelEcoli;
-extern const Sifteo::AssetImage LabelEukaryotic;
-extern const Sifteo::AssetImage LabelEmpty;
-extern const Sifteo::AssetImage LabelBidirectional;
-extern const Sifteo::AssetImage Tip2;
-extern const Sifteo::AssetImage Footer;
 extern const Sifteo::AssetImage Tip1;
-extern const Sifteo::AssetImage LabelConsitutitive;
-extern const Sifteo::AssetImage LabelCDS;
+extern const Sifteo::AssetImage IconSBOL;
 extern const Sifteo::PinnedAssetImage StripeTile;
 extern const Sifteo::PinnedAssetImage BgTile;
+extern const Sifteo::AssetImage LabelBidirectional;
+extern const Sifteo::AssetImage Tip2;
+extern const Sifteo::AssetImage LabelChromoproteins;
+extern const Sifteo::AssetImage LabelConsitutitive;
+extern const Sifteo::AssetImage LabelConstitutiveProkaryoticRBS;
+extern const Sifteo::AssetImage LabelEcoli;
+extern const Sifteo::AssetImage LabelCDS;
+extern const Sifteo::AssetImage Footer;
+extern const Sifteo::AssetImage LabelEmpty;
+extern const Sifteo::AssetImage LabelEukaryotic;
 extern const Sifteo::AssetImage LabelFluorescentProteins;
 extern const Sifteo::AssetImage LabelForward;
 extern const Sifteo::AssetImage LabelMultiregulated;
@@ -128,3 +126,7 @@ extern const Sifteo::AssetImage LabelBBa_J52016;
 extern const Sifteo::AssetImage LabelBBa_I766555;
 extern const Sifteo::AssetImage LabelBBa_J31005;
 extern const Sifteo::AssetImage NoMore;
+extern const Sifteo::AssetImage NoReally;
+extern Sifteo::AssetGroup IconAssets;
+extern const Sifteo::AssetImage Icon;
+extern const Sifteo::AssetAudio WaterDrop;

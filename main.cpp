@@ -167,11 +167,12 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 		switch (e.type){
 
 			{ case MENU_ITEM_PRESS:
-				m.anchor(e.item);
 				LOG("MENU ITEM BEING PRESSED NAO\n");
-				RGB565 red = Sifteo::RGB565::fromRGB((float)255, (float)0, (float)0);
-				v[id].colormap.setRange(&red, 0, 1);
-				Sifteo::System::paint();
+				static struct MenuAssets newAssets = {  &StripeTile, &Footer, &LabelEmpty, { NULL } };
+				menus[id].init(v[id], &newAssets, menus[id].items);
+				v[id].touch();
+				Sifteo::AudioChannel(0).play(WaterDrop);
+				//CubeID(id).detachVideoBuffer();
 				break;
 			}
 
@@ -223,7 +224,7 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 		m.performDefault();
 	}
 	else {
-		ASSERT(e.type == MENU_EXIT);
+		//ASSERT(e.type == MENU_EXIT);
 		m.performDefault();
 	}
 }
@@ -381,7 +382,7 @@ void main(){
 		}
 	}
 
-	ASSERT(e.type == MENU_EXIT);
+	//ASSERT(e.type == MENU_EXIT);
 	//m.performDefault();
 
 	LOG("Selected Game: %d\n", e.item);

@@ -5,6 +5,8 @@ Icon = image{"icon.png"}
 
 -- Menu Assets
 
+WaterDrop = sound{"waterDroplet.wav"}
+
 BetterflowAssets = group{quality=10}
 
 BgTile = image{ "bg.png", pinned=1 }
@@ -139,3 +141,4 @@ LabelBBa_I766555 = image{"PartsLabelsBBa_I766555.png"}
 LabelBBa_J31005 = image{"PartsLabelsBBa_J31005.png"}
 
 NoMore = image{"NoMore.png"}
+NoReally = image{"icon.png"}
