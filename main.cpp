@@ -34,7 +34,7 @@ static struct MenuItem promYeNeg[] = { { &IconBBa_K950000, &LabelBBa_K950000 }, 
 static struct MenuItem promYeMulti[] = { { &IconBBa_I766200, &LabelBBa_I766200 }, { NULL, NULL } };
 static struct MenuItem cdsRepChromo[] = { { &IconBBa_K592009, &LabelBBa_K592009 }, { &IconBBa_K592011, &LabelBBa_K592011 }, { &IconBBa_K592012, &LabelBBa_K592012 }, { NULL, NULL } };
 static struct MenuItem cdsRepFluor[] = { { &IconBBa_E0030, &LabelBBa_E0030 }, { &IconBBa_E0020, &LabelBBa_E0020 }, { NULL, NULL } };
-static struct MenuItem cdsTransAct[] = {/* { &IconBBa_C0079, &LabelBBa_C0079 }*/ { NULL, NULL } };
+static struct MenuItem cdsTransAct[] = { { &IconBBa_C0079, &LabelBBa_C0079 }, { NULL, NULL } };
 static struct MenuItem cdsTransRep[] = { { &IconBBa_C0012, &LabelBBa_C0012 }, { NULL, NULL } };
 static struct MenuItem cdsTransMult[] = { { &IconBBa_C0062, &LabelBBa_C0062 }, { NULL, NULL } };
 static struct MenuItem termEcFor[] = { { &IconBBa_B0010, &LabelBBa_B0010 }, { NULL, NULL } };
@@ -48,6 +48,10 @@ static struct MenuEvent events[gNumCubes];
 static uint8_t cubetouched;
 static bool flipped[gNumCubes] = { false };
 static bool locked[gNumCubes] = { false };
+
+//guuuuh it would be really awesome if we could use stacks LOOKIN AT YOU SIFTEO 
+CubeID stack[gNumCubes];
+int stackPointer = 0;
 
 //NODES: 
 static const unsigned numNodes = 32;
@@ -98,18 +102,34 @@ private:
 				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && !flipped[id]){
 					flipped[id] = true;
 					LOG("flipped\n");
+					handleStack(id, 1);
 				}
 				else if (motion[id].tilt.z == 1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && flipped[id]){
 					flipped[id] = false;
 					LOG("flipped back\n");
+					handleStack(id, 0);
 				}
 			}
 		}
+	}
 
-
-
+	static void handleStack(CubeID flipped, int binary){
+		if (binary == 1){
+			stack[stackPointer] = flipped;
+			stackPointer++;
+		}
+		else {
+			if (flipped == stack[stackPointer]){
+				stackPointer--;
+			}
+			else {
+				stackPointer = 0;
+			}
+		}
 	}
 };
+
+
 
 
 /* BEGIN METHOD
@@ -164,14 +184,13 @@ void plusCube(unsigned id, struct MenuEvent e){
 
 /* DO IT METHOD
 handles event cases, takes in Menu and MenuEvent parameters*/
-void doit(Menu &m, struct MenuEvent &e, unsigned id)
+void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 {
 	if (m.pollEvent(&e)){
 
 		switch (e.type){
 
 			{ case MENU_ITEM_PRESS:
-				//LOG("MENU ITEM BEING PRESSED NAO\n");
 				if (locked[id]){
 					menus[id].init(v[id], &cubeAssets, menus[gNumCubes].items);
 					Sifteo::AudioChannel(0).play(WaterDrop);
@@ -179,9 +198,8 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 					break;
 				}
 				else {
-					static struct MenuAssets newAssets = { &StripeTile, &Footer, &LabelEmpty, { NULL } };
+					static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
 					struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
-					//LOG("item is: %d", e.item);
 					menus[gNumCubes].init(v[id], &cubeAssets, menus[id].items);
 					menus[id].init(v[id], &newAssets, newItems);
 					Sifteo::AudioChannel(0).play(WaterDrop);
@@ -355,7 +373,6 @@ void assign_Nodes(Node* nodeArray){
 	//creating & setting top level children
 	Node topArray[4];
 	for (int i = 0; i < 4; i++){
-		LOG("assigning top array");
 		topArray[i] = nodeArray[i + 1];
 	}
 	nodeArray[0].setChildren(topArray);

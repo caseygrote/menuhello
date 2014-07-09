@@ -11,6 +11,7 @@ BetterflowAssets = group{quality=10}
 
 BgTile = image{ "bg.png", pinned=1 }
 StripeTile = image{ "stripes.png", pinned=1 }
+NewBgTile = image{"newbg.png", pinned=1}
 
 IconSBOL = image{ "sbol.png" }
 IconPromoter = image{ "promoter.png" }
@@ -21,8 +22,10 @@ Tip1 = image{ "Tip1.png" }
 Tip2 = image{ "Tip1.png" }
 
 Footer = image{ "Footer.png" }
+newFooter = image{"newFoot.png"}
 
 LabelEmpty = image{ "LabelEmpty.png" }
+newLabelEmpty = image{"newLabelEmpty.png"}
 
 
 LabelBidirectional =image{"LabelsBidirectional.png"}
@@ -130,6 +133,7 @@ LabelBBa_E0020 = image{"PartsLabelsBBa_E0020.png"}
 LabelBBa_K389005 = image{"PartsLabelsBBa_K389005.png"}
 LabelBBa_C0012 = image{"PartsLabelsBBa_C0012.png"}
 LabelBBa_C0062 = image{"PartsLabelsBBa_C0062.png"}
+LabelBBa_C0079 = image{"PartsLabelsBBa_C0079.png"}
 LabelBBa_B0010 = image{"PartsLabelsBBa_B0010.png"}
 LabelBBa_B0020 = image{"PartsLabelsBBa_B0020.png"}
 LabelBBa_B0011 = image{"PartsLabelsBBa_B0011.png"}
