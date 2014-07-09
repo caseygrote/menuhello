@@ -42,10 +42,12 @@ static struct MenuItem termEcRev[] = { { &IconBBa_B0020, &LabelBBa_B0020 }, { NU
 static struct MenuItem termEcBi[] = { { &IconBBa_B0011, &LabelBBa_B0011 }, { &IconBBa_B0014, &LabelBBa_B0014 }, { NULL, NULL } };
 static struct MenuAssets cubeAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
-static Menu menus[gNumCubes];
+static Menu menus[gNumCubes + 1];
 static VideoBuffer v[gNumCubes];
 static struct MenuEvent events[gNumCubes];
 static uint8_t cubetouched;
+static bool flipped[gNumCubes] = { false };
+static bool locked[gNumCubes] = { false };
 
 //NODES: 
 static const unsigned numNodes = 32;
@@ -168,12 +170,22 @@ void doit(Menu &m, struct MenuEvent &e, unsigned id)
 
 			{ case MENU_ITEM_PRESS:
 				LOG("MENU ITEM BEING PRESSED NAO\n");
-				static struct MenuAssets newAssets = {  &StripeTile, &Footer, &LabelEmpty, { NULL } };
-				menus[id].init(v[id], &newAssets, menus[id].items);
-				v[id].touch();
-				Sifteo::AudioChannel(0).play(WaterDrop);
-				//CubeID(id).detachVideoBuffer();
-				break;
+				if (locked[id]){
+					menus[id].init(v[id], &cubeAssets, menus[gNumCubes].items);
+					Sifteo::AudioChannel(0).play(WaterDrop);
+					locked[id] = false;
+					break;
+				}
+				else {
+					static struct MenuAssets newAssets = { &StripeTile, &Footer, &LabelEmpty, { NULL } };
+					struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
+					LOG("item is: %d", e.item);
+					menus[gNumCubes].init(v[id], &cubeAssets, menus[id].items);
+					menus[id].init(v[id], &newAssets, newItems);
+					Sifteo::AudioChannel(0).play(WaterDrop);
+					locked[id] = true;
+					break;
+				}
 			}
 
 			{
