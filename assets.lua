@@ -27,7 +27,7 @@ newFooter = image{"newFoot.png"}
 LabelEmpty = image{ "LabelEmpty.png" }
 newLabelEmpty = image{"newLabelEmpty.png"}
 
-
+LabelActivators = image{"LabelActivators.png"}
 LabelBidirectional =image{"LabelsBidirectional.png"}
 LabelCDS =image{"LabelsCDS.png"}
 LabelChromoproteins =image{"LabelsChromoproteins.png"}
@@ -38,11 +38,13 @@ LabelEukaryotic=image{"LabelsEukaryotic.png"}
 LabelFluorescentProteins =image{"LabelsFluorescentProteins.png"}
 LabelForward = image{"LabelsForward.png"}
 LabelMultiregulated = image{"LabelsMultiregulated.png"}
+LabelMultiple = image{"LabelMultiple.png"}
 LabelNegative = image{"LabelsNegative.png"}
 LabelPositive = image{"LabelsPositive.png"}
 LabelPromoters = image{"LabelsPromoters.png"}
 LabelRBS = image{"LabelsRBS.png"}
 LabelReporters = image{"LabelsReporters.png"}
+LabelRepressors = image{"LabelRepressors.png"}
 LabelReverse = image{"LabelsReverse.png"}
 LabelRiboregulators = image{"LabelsRiboregulators.png"}
 LabelSelectionMarkers = image{"LabelsSelectionMarkers.png"}
