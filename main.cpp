@@ -56,7 +56,7 @@ int stackPointer = 0;
 
 //NODES: 
 static const unsigned numNodes = 32;
-static Node nodeItems[numNodes]; //all node items 
+static Node nodeItems[numNodes+1]; //all node items 
 static Node currentNode[gNumCubes + 1]; //node items assoc. with cubes 
 
 static unsigned gNumCubesConnected = CubeSet::connected().count();
@@ -104,12 +104,12 @@ private:
 				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && !flipped[id] && locked[id]){
 					flipped[id] = true;
 					LOG("flipped\n");
-					handleStack(id, 1);
+					//handleStack(id, 1);
 				}
 				else if (motion[id].tilt.z == 1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && flipped[id]){
 					flipped[id] = false;
 					LOG("flipped back\n");
-					handleStack(id, 0);
+					//handleStack(id, 0);
 				}
 			}
 		}
@@ -178,7 +178,8 @@ void level(unsigned id, PCubeID addedCube){
 		currentNode[addedCube] = noMore;
 	}
 	else {
-		Node newtr = tr.getChildren()[screen];
+		Node newtr = tr.getChildren()[screen+1];
+		LOG("size is %d", sizeof(tr.getChildren()));
 		if (currentNode[addedCube].getMenu() != newtr.getMenu()){
 			menus[addedCube].init(v[addedCube], newtr.getAssets(), newtr.getMenu());
 			LOG("Successfully initialized\n");
@@ -383,23 +384,23 @@ void assign_Nodes(Node* nodeArray){
 	nodeArray[2].setChildren(rbsArray);
 
 	//creating and setting cds children
-	Node cdsArray[3];
-	cdsArray[0] = nodeArray[10];
-	cdsArray[1] = nodeArray[11];
-	cdsArray[2] = nodeArray[12];
+	Node cdsArray[4];
+	cdsArray[1] = nodeArray[10];
+	cdsArray[2] = nodeArray[11];
+	cdsArray[3] = nodeArray[12];
 	nodeArray[3].setChildren(cdsArray);
 
 	//creating and setting term children
-	Node termArray[3];
-	for (int i = 0; i < 3; i++){
-		termArray[i] = nodeArray[i + 13];
+	Node termArray[4];
+	for (int i = 1; i < 4; i++){
+		termArray[i] = nodeArray[i + 12];
 	}
 	nodeArray[4].setChildren(termArray);
 
 	//creating & setting top level children
-	Node topArray[4];
-	for (int i = 0; i < 4; i++){
-		topArray[i] = nodeArray[i + 1];
+	Node topArray[5];
+	for (int i = 1; i < 5; i++){
+		topArray[i] = nodeArray[i];
 	}
 	nodeArray[0].setChildren(topArray);
 }
@@ -409,11 +410,6 @@ void assign_Nodes(Node* nodeArray){
 contains begin(), initializes the MenuEvent array, 
 initializes menus, & contains doit while loop*/
 void main(){
-	//TESTING CODE FOR TREE: 
-	//static Tree treeItems[numTrees];
-	//assign_Trees(treeItems);
-	//static Tree currentTree[gNumCubes + 1];
-	//currentTree[gNumCubes] = treeItems[numTrees - 1];
 
 	assign_Nodes(nodeItems);
 	currentNode[gNumCubes] = nodeItems[numNodes - 1];
