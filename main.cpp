@@ -21,7 +21,7 @@ static struct MenuItem rbsRibo[] = { { &IconBBa_J01010, &LabelBBa_J01010 }, { &I
 static struct MenuItem rbsYeast[] = { { &IconBBa_J63003, &LabelBBa_J63003 }, { &IconBBa_K165002, &LabelBBa_K165002 }, { NULL, NULL } };
 static struct MenuItem cdsReport[] = { { &IconChromoproteins, &LabelChromoproteins }, { &IconFluorescentProteins, &LabelFluorescentProteins }, { NULL, NULL } };
 static struct MenuItem cdsSelect[] = { { &IconBBa_K389005, &LabelBBa_K389005 }, { &IconBBa_J31005, &LabelBBa_J31005 }, { NULL, NULL } };
-static struct MenuItem cdsTrans[] = { { &IconActivators, &LabelEmpty }, { &IconRepressor, &LabelEmpty }, { &IconMultiple, &LabelEmpty }, { NULL, NULL } };
+static struct MenuItem cdsTrans[] = { { &IconActivators, &LabelEmpty }, { &IconRepressor, &LabelEmpty }, { &IconMultiple, &LabelEmpty }, { NULL, NULL } }; //bach; (first add to assets.lua)
 static struct MenuItem termEcoli[] = { { &IconForward, &LabelForward }, { &IconReverse, &LabelReverse }, { NULL, NULL } };
 static struct MenuItem termYeast[] = { { &IconBBa_J63002, &LabelBBa_J63002 }, { &IconBBa_K110012, &LabelBBa_K110012 }, { NULL, NULL } };
 static struct MenuItem termEuk[] = { { &IconBBa_J52016, &LabelBBa_J52016 }, { &IconBBa_J63002, &LabelBBa_J63002 }, { NULL, NULL } };
@@ -42,7 +42,8 @@ static struct MenuItem termEcRev[] = { { &IconBBa_B0020, &LabelBBa_B0020 }, { NU
 static struct MenuItem termEcBi[] = { { &IconBBa_B0011, &LabelBBa_B0011 }, { &IconBBa_B0014, &LabelBBa_B0014 }, { NULL, NULL } };
 static struct MenuAssets cubeAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
 
-static Menu menus[gNumCubes + 1];
+static Menu menus[gNumCubes];
+static Menu menuStore[gNumCubes];
 static VideoBuffer v[gNumCubes];
 static struct MenuEvent events[gNumCubes];
 static uint8_t cubetouched;
@@ -208,7 +209,7 @@ void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 			{ case MENU_ITEM_PRESS:
 				if (!flipped[id]){
 					if (locked[id]){
-						menus[id].init(v[id], &cubeAssets, menus[gNumCubes].items);
+						menus[id].init(v[id], &cubeAssets, menuStore[gNumCubes].items);
 						Sifteo::AudioChannel(0).play(WaterDrop);
 						locked[id] = false;
 						break;
@@ -216,7 +217,7 @@ void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 					else {
 						static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
 						struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
-						menus[gNumCubes].init(v[id], &cubeAssets, menus[id].items);
+						menuStore[id].init(v[id], &cubeAssets, menus[id].items);
 						menus[id].init(v[id], &newAssets, newItems);
 						Sifteo::AudioChannel(0).play(WaterDrop);
 						locked[id] = true;
