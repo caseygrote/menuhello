@@ -6,11 +6,7 @@
 
 #pragma once
 
-extern Sifteo::AssetGroup IconAssets;
-extern const Sifteo::AssetImage Icon;
 extern Sifteo::AssetGroup BetterflowAssets;
-extern const Sifteo::PinnedAssetImage StripeTile;
-extern const Sifteo::PinnedAssetImage NewBgTile;
 extern const Sifteo::AssetImage Tip1;
 extern const Sifteo::PinnedAssetImage BgTile;
 extern const Sifteo::AssetImage Tip0;
@@ -74,6 +70,8 @@ extern const Sifteo::AssetImage IconBBa_I1051;
 extern const Sifteo::AssetImage IconBBa_J63006;
 extern const Sifteo::AssetImage IconBBa_K950000;
 extern const Sifteo::AssetImage IconBBa_K950002;
+extern const Sifteo::PinnedAssetImage StripeTile;
+extern const Sifteo::PinnedAssetImage NewBgTile;
 extern const Sifteo::AssetImage IconBBa_I766200;
 extern const Sifteo::AssetImage IconBBa_J61100;
 extern const Sifteo::AssetImage IconBBa_J61101;
@@ -133,4 +131,6 @@ extern const Sifteo::AssetImage LabelBBa_I766555;
 extern const Sifteo::AssetImage LabelBBa_J31005;
 extern const Sifteo::AssetImage NoMore;
 extern const Sifteo::AssetImage NoReally;
+extern Sifteo::AssetGroup IconAssets;
+extern const Sifteo::AssetImage Icon;
 extern const Sifteo::AssetAudio WaterDrop;

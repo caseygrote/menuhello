@@ -66,6 +66,7 @@ static AssetSlot MainSlot = AssetSlot::allocate()
 
 static TiltShakeRecognizer motion[gNumCubes]; //for keeping track of each cube's motion @ev
 static unsigned currentScreen[gNumCubes]; //for keeping track of each cube's current screen @ev
+static unsigned currentScreenStore[gNumCubes] = { 0 };
 //sort of hacky/non-modular but it works for proof of concept @ev
 typedef Array<char[], gNumCubes> currentSearch; //array of character arrays
 
@@ -180,6 +181,7 @@ void level(unsigned id, PCubeID addedCube){
 		Node newtr = tr.getChildren()[screen];
 		if (currentNode[addedCube].getMenu() != newtr.getMenu()){
 			menus[addedCube].init(v[addedCube], newtr.getAssets(), newtr.getMenu());
+			LOG("Successfully initialized\n");
 			currentNode[addedCube] = newtr;
 		}
 	}
@@ -209,12 +211,15 @@ void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 			{ case MENU_ITEM_PRESS:
 				if (!flipped[id]){
 					if (locked[id]){
-						menus[id].init(v[id], &cubeAssets, menuStore[gNumCubes].items);
+						LOG("current screen is %d\n", currentScreen[id]);
+						menus[id].init(v[id], &cubeAssets, menuStore[id].items);
+						menus[id].anchor(currentScreenStore[id]);
 						Sifteo::AudioChannel(0).play(WaterDrop);
 						locked[id] = false;
 						break;
 					}
 					else {
+						currentScreenStore[id] = currentScreen[id];
 						static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
 						struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
 						menuStore[id].init(v[id], &cubeAssets, menus[id].items);
@@ -236,7 +241,9 @@ void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 			{case MENU_NEIGHBOR_ADD:
 				LOG("found cube %d on side %d of menu (neighbor's %d side)\n",
 					e.neighbor.neighbor, e.neighbor.masterSide, e.neighbor.neighborSide);
-				plusCube(id, e);
+				if (!locked[id] && !locked[e.neighbor.neighbor]){
+					plusCube(id, e);
+				}
 				break;
 
 			}
