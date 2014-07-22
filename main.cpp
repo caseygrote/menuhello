@@ -22,7 +22,7 @@ static struct MenuItem rbsYeast[] = { { &IconBBa_J63003, &LabelBBa_J63003 }, { &
 static struct MenuItem cdsReport[] = { { &IconChromoproteins, &LabelChromoproteins }, { &IconFluorescentProteins, &LabelFluorescentProteins }, { NULL, NULL } };
 static struct MenuItem cdsSelect[] = { { &IconBBa_K389005, &LabelBBa_K389005 }, { &IconBBa_J31005, &LabelBBa_J31005 }, { NULL, NULL } };
 static struct MenuItem cdsTrans[] = { { &IconActivators, &LabelEmpty }, { &IconRepressor, &LabelEmpty }, { &IconMultiple, &LabelEmpty }, { NULL, NULL } }; //bach; (first add to assets.lua)
-static struct MenuItem termEcoli[] = { { &IconForward, &LabelForward }, { &IconReverse, &LabelReverse }, { NULL, NULL } };
+static struct MenuItem termEcoli[] = { { &IconForward, &LabelForward }, { &IconReverse, &LabelReverse }, { NULL, NULL } }; //BIDIRECTIONAL? 
 static struct MenuItem termYeast[] = { { &IconBBa_J63002, &LabelBBa_J63002 }, { &IconBBa_K110012, &LabelBBa_K110012 }, { NULL, NULL } };
 static struct MenuItem termEuk[] = { { &IconBBa_J52016, &LabelBBa_J52016 }, { &IconBBa_J63002, &LabelBBa_J63002 }, { NULL, NULL } };
 static struct MenuItem promEcPos[] = { { &IconBBa_I0500, &LabelBBa_I0500 }, { NULL, NULL } };
@@ -339,47 +339,47 @@ void assign_Nodes(Node* nodeArray){
 	nodeArray[30] = Node(termEcBi, &cubeAssets, 3);
 
 	//setting level 3 children
-	Node promEcoliArray[4];
-	for (int i = 0; i < 3; i++){
-		promEcoliArray[i] = nodeArray[i + 16];
+	Node promEcoliArray[5];
+	for (int i = 1; i < 4; i++){
+		promEcoliArray[i] = nodeArray[i + 15];
 	}
-	promEcoliArray[3] = nodeArray[31];
+	promEcoliArray[4] = nodeArray[31];
 	nodeArray[5].setChildren(promEcoliArray);
 
-	Node promYeastArray[4];
-	promYeastArray[0] = nodeArray[19];
-	promYeastArray[1] = nodeArray[20];
-	promYeastArray[2] = nodeArray[21];
-	promYeastArray[3] = nodeArray[22];
+	Node promYeastArray[5];
+	promYeastArray[1] = nodeArray[19];
+	promYeastArray[2] = nodeArray[20];
+	promYeastArray[3] = nodeArray[21];
+	promYeastArray[4] = nodeArray[22];
 	nodeArray[6].setChildren(promYeastArray);
 
-	Node cdsRepArray[2];
-	cdsRepArray[0] = nodeArray[23];
-	cdsRepArray[1] = nodeArray[24];
+	Node cdsRepArray[3];
+	cdsRepArray[1] = nodeArray[23];
+	cdsRepArray[2] = nodeArray[24];
 	nodeArray[10].setChildren(cdsRepArray);
 
-	Node cdsTransArray[3];
-	cdsTransArray[0] = nodeArray[25];
-	cdsTransArray[1] = nodeArray[26];
-	cdsTransArray[2] = nodeArray[27];
+	Node cdsTransArray[4];
+	cdsTransArray[1] = nodeArray[25];
+	cdsTransArray[2] = nodeArray[26];
+	cdsTransArray[3] = nodeArray[27];
 	nodeArray[12].setChildren(cdsTransArray);
 
-	Node termEcArray[3];
-	termEcArray[0] = nodeArray[28];
-	termEcArray[1] = nodeArray[29];
-	termEcArray[2] = nodeArray[30];
+	Node termEcArray[4];
+	termEcArray[1] = nodeArray[28];
+	termEcArray[2] = nodeArray[29];
+	termEcArray[3] = nodeArray[30];
 	nodeArray[13].setChildren(termEcArray);
 
 	//creating and setting promoter children 
-	Node promArray[2];
-	promArray[0] = nodeArray[5];
-	promArray[1] = nodeArray[6];
+	Node promArray[3];
+	promArray[1] = nodeArray[5];
+	promArray[2] = nodeArray[6];
 	nodeArray[1].setChildren(promArray);
 
 	//creating and setting rbs children
-	Node rbsArray[3];
-	for (int i = 0; i < 3; i++){
-		rbsArray[i] = nodeArray[i+7];
+	Node rbsArray[4];
+	for (int i = 1; i < 4; i++){
+		rbsArray[i] = nodeArray[i+6];
 	}
 	nodeArray[2].setChildren(rbsArray);
 
