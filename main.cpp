@@ -53,7 +53,7 @@ static bool locked[gNumCubes] = { false };
 
 //guuuuh it would be really awesome if we could use stacks LOOKIN AT YOU SIFTEO 
 CubeID stack[gNumCubes + 1] = {-1};
-int stackPointer = 1;
+int stackPointer = 0;
 
 //NODES: 
 static const unsigned numNodes = 32;
@@ -129,7 +129,7 @@ private:
 					static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
 					menuStore[flipped].init(v[flipped], &cubeAssets, menus[flipped].items); //storing old one 
 					menus[flipped].init(v[flipped], NoMore.getAssets(), construct);
-					stack[1] = -1; //essentially "clearing" stack
+					stack[0] = -1; //essentially "clearing" stack
 				}
 				else {
 					LOG("other cube\n");
@@ -140,10 +140,10 @@ private:
 				}
 			}
 			else {
-				stackPointer = 1;
+				stackPointer = 0;
 				//return everyone to their originals 
-				if (stack[1] != -1) {
-					for (int i = 1; i < sizeof(stack); i++){
+				if (stack[0] != -1) {
+					for (int i = 0; i < sizeof(stack); i++){
 						if (stack[i] != -1){
 						menus[stack[i]].init(v[flipped], &cubeAssets, menuStore[stack[i]].items);
 						PCubeID cube(stack[i]);
