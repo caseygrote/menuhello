@@ -59,6 +59,7 @@ IconCDS =image{"IconsCDS.png"}
 IconChromoproteins =image{"IconsChromoproteins.png"}
 IconConsitutitive = image{"IconsConsitutitive.png"}
 IconConstitutiveProkaryoticRBS = image{"IconsConstitutiveProkaryoticRBS.png"}
+IconConstruct = image{"IconsConstruct.png"};
 IconEcoli =image {"IconsEcoli.png"}
 IconEukaryotic=image{"IconsEukaryotic.png"}
 IconFluorescentProteins =image{"IconsFluorescentProteins.png"}

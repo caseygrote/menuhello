@@ -41,6 +41,7 @@ static struct MenuItem termEcFor[] = { { &IconBBa_B0010, &LabelBBa_B0010 }, { NU
 static struct MenuItem termEcRev[] = { { &IconBBa_B0020, &LabelBBa_B0020 }, { NULL, NULL } };
 static struct MenuItem termEcBi[] = { { &IconBBa_B0011, &LabelBBa_B0011 }, { &IconBBa_B0014, &LabelBBa_B0014 }, { NULL, NULL } };
 static struct MenuAssets cubeAssets = { &BgTile, &Footer, &LabelEmpty, { &Tip0, &Tip1, &Tip2, NULL } };
+static struct MenuItem construct[] = {{&IconConstruct, &LabelEmpty}, {NULL, NULL}};
 
 static Menu menus[gNumCubes];
 static Menu menuStore[gNumCubes];
@@ -51,8 +52,8 @@ static bool flipped[gNumCubes] = { false };
 static bool locked[gNumCubes] = { false };
 
 //guuuuh it would be really awesome if we could use stacks LOOKIN AT YOU SIFTEO 
-CubeID stack[gNumCubes];
-int stackPointer = 0;
+CubeID stack[gNumCubes + 1] = {-1};
+int stackPointer = 1;
 
 //NODES: 
 static const unsigned numNodes = 32;
@@ -89,8 +90,6 @@ public:
 
 private:
 	void onAccelChange(unsigned id){
-		//CubeID cube(id); //is this creating a cube from the id? 
-		//i guess we don't need this? maybe this is for the packet msg?  @ev 
 
 		unsigned changeFlags = motion[id].update(); 
 		if (changeFlags){
@@ -104,12 +103,12 @@ private:
 				if (motion[id].tilt.z == -1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && !flipped[id] && locked[id]){
 					flipped[id] = true;
 					LOG("flipped\n");
-					//handleStack(id, 1);
+					handleStack(id, 1);
 				}
 				else if (motion[id].tilt.z == 1 && motion[id].tilt.x == 0 && motion[id].tilt.y == 0 && flipped[id]){
 					flipped[id] = false;
 					LOG("flipped back\n");
-					//handleStack(id, 0);
+					handleStack(id, 0);
 				}
 			}
 		}
@@ -118,6 +117,7 @@ private:
 	static void handleStack(CubeID flipped, int binary){
 		Node NoMore = currentNode[gNumCubes];
 		if (binary == 1){
+			LOG("stacking\n");
 			stack[stackPointer] = flipped;
 			stackPointer++;
 		}
@@ -125,23 +125,36 @@ private:
 			if (flipped == stack[stackPointer-1]){
 				if (stackPointer == 1){
 					LOG("bottom-most cube\n");
+					stackPointer--;
 					static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
-					struct MenuItem newItems[] = { menus[flipped].items[0], { NULL, NULL } };
-					menus[gNumCubes].init(v[flipped], &cubeAssets, menus[flipped].items);
-					menus[flipped].init(v[flipped], &newAssets, newItems);
+					menuStore[flipped].init(v[flipped], &cubeAssets, menus[flipped].items); //storing old one 
+					menus[flipped].init(v[flipped], NoMore.getAssets(), construct);
+					stack[1] = -1; //essentially "clearing" stack
 				}
 				else {
 					LOG("other cube\n");
 					stackPointer--;
+					menuStore[flipped].init(v[flipped], &cubeAssets, menus[flipped].items);
 					menus[flipped].init(v[flipped], NoMore.getAssets(), NoMore.getMenu());
 					currentNode[flipped] = NoMore;
 				}
 			}
 			else {
-				stackPointer = 0;
+				stackPointer = 1;
+				//return everyone to their originals 
+				if (stack[1] != -1) {
+					for (int i = 1; i < sizeof(stack); i++){
+						if (stack[i] != -1){
+						menus[stack[i]].init(v[flipped], &cubeAssets, menuStore[stack[i]].items);
+						PCubeID cube(stack[i]);
+						LOG("fixing cube number %d", cube);
+						}
+					}
+				}
 			}
 
 		}
+		locked[flipped] = false;
 		LOG("stackPointer:%d\n", stackPointer);
 	}
 };
