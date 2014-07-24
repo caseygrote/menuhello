@@ -4,6 +4,7 @@
 #include "assets.gen.h"
 #include <node.h>
 #include <sifteo/usb.h>
+#include <sifteo/math.h>
 
 
 using namespace Sifteo;
@@ -204,29 +205,58 @@ void plusCube(unsigned id, struct MenuEvent e){
 		CubeID(id).detachVideoBuffer();
 		PCubeID addedCube = e.neighbor.neighbor;
 		level(id, addedCube);
+		for (int i = 0; i < 8; i++){
+			currPart[addedCube][i] = currPart[id][i];
+		}
+		currPart[addedCube][currentNode[addedCube].getLevel() * 2] = 0;
+		currPart[addedCube][currentNode[addedCube].getLevel() * 2 + 1] = 0;
 	}
 }
 
 /* WRITE METHOD
 for sending messages through usb pipe
 based on usb sample code provided by sifteo*/
-void write(CubeID id, int msg){
+void write(CubeID id){
 	usbPipe.attach();
 
 	if (Usb::isConnected() && usbPipe.writeAvailable()) {
+
+		//create message: 
+		int message = 0;
+		for (int i = 0; i < 8; i++){
+			double ten = pow(10.0, 7.0-i);
+			LOG("multiply by: %f ", ten);
+			message = message + (ten * currPart[id][i]);
+			LOG("index: %d, number: %d\n", i, currPart[id][i]);
+		}
 		UsbPacket &packet = usbPipe.sendQueue.reserve();
 		packet.setType(0);
 		packet.bytes()[0] = (uint8_t)69696969;
 		packet.bytes()[1] = (uint8_t)id;
-		packet.bytes()[2] = (uint8_t)msg;
+		packet.bytes()[2] = (uint8_t)message;
 
 		LOG("Sending: %d bytes, type=%02x, data=%19h\n",
 			packet.size(), packet.type(), packet.bytes());
 
-		LOG("Should look like: %d, %d\n", (uint8_t)id, (uint8_t)msg);
+		LOG("Should look like: %d, %d\n", (uint8_t)id, (uint8_t)message);
+		LOG("Non-uint8_t: %d\n", message);
 
 		usbPipe.sendQueue.commit();
 	}
+	usbPipe.detach();
+}
+
+void unWrite(CubeID id){
+	usbPipe.attach();
+	if (Usb::isConnected() && usbPipe.writeAvailable()){
+		UsbPacket &packet = usbPipe.sendQueue.reserve();
+		packet.setType(0);
+		packet.bytes()[0] = (uint8_t)69696969;
+		packet.bytes()[1] = (uint8_t)id;
+		packet.bytes()[2] = (uint8_t)22222222;
+		usbPipe.sendQueue.commit();
+	}
+
 	usbPipe.detach();
 }
 
@@ -241,7 +271,7 @@ void lockCube(unsigned id, struct MenuEvent e){
 			menus[id].anchor(currentScreenStore[id]);
 			Sifteo::AudioChannel(0).play(WaterDrop);
 			locked[id] = false;
-			write(id, 11111111);
+			unWrite(id);
 		}
 		else {
 			currentScreenStore[id] = currentScreen[id];
@@ -251,7 +281,7 @@ void lockCube(unsigned id, struct MenuEvent e){
 			menus[id].init(v[id], &newAssets, newItems);
 			Sifteo::AudioChannel(0).play(WaterDrop);
 			locked[id] = true;
-			write(id, 00000000);
+			write(id);
 		}
 	}
 }
@@ -486,6 +516,9 @@ void main(){
 		menus[i].init(v[i], &cubeAssets, topItems);
 		menus[i].anchor(0);
 		currentNode[i] = nodeItems[0];
+		for (int j = 0; j < 8; j++){
+			currPart[i][j] = 2;
+		}
 	}
 
 	while (1){
