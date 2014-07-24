@@ -68,8 +68,8 @@ static AssetSlot MainSlot = AssetSlot::allocate()
 static TiltShakeRecognizer motion[gNumCubes]; //for keeping track of each cube's motion @ev
 static unsigned currentScreen[gNumCubes]; //for keeping track of each cube's current screen @ev
 static unsigned currentScreenStore[gNumCubes] = { 0 };
-//sort of hacky/non-modular but it works for proof of concept @ev
-typedef Array<char[], gNumCubes> currentSearch; //array of character arrays
+
+static unsigned currPart[gNumCubes][8] = { { 1 } };
 
 UsbPipe <3, 4> usbPipe;
 
@@ -298,6 +298,27 @@ void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 			{case MENU_ITEM_ARRIVE:
 				//LOG("arriving at menu item %d\n", e.item);
 				currentScreen[id] = e.item;
+				unsigned level = currentNode[id].getLevel();
+				if (e.item == 0){
+					currPart[id][level * 2] = 0;
+					currPart[id][level * 2 + 1] = 0;
+					LOG("writing array index %d\n", level * 2);
+				}
+				else if (e.item == 1){
+					currPart[id][level * 2] = 0;
+					currPart[id][level * 2 + 1] = 1;
+					LOG("writing array index %d\n", level * 2);
+				}
+				else if (e.item == 2){
+					currPart[id][level * 2] = 1;
+					currPart[id][level * 2 + 1] = 0;
+					LOG("writing array index %d\n", level * 2);
+				}
+				else if (e.item == 3){
+					currPart[id][level * 2] = 1;
+					currPart[id][level * 2 + 1] = 1;
+					LOG("writing array index %d\n", level * 2);
+				}
 				break;
 			}
 

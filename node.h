@@ -47,6 +47,10 @@ public:
 		return items;
 	}
 
+	unsigned getLevel(){
+		return level;
+	}
+
 private:
 	MenuItem* items;
 	MenuAssets* assets;
