@@ -3,6 +3,7 @@
 #include <sifteo/menu.h>
 #include "assets.gen.h"
 #include <node.h>
+#include <sifteo/usb.h>
 
 
 using namespace Sifteo;
@@ -51,7 +52,6 @@ static uint8_t cubetouched;
 static bool flipped[gNumCubes] = { false };
 static bool locked[gNumCubes] = { false };
 
-//guuuuh it would be really awesome if we could use stacks LOOKIN AT YOU SIFTEO 
 CubeID stack[gNumCubes + 1] = {-1};
 int stackPointer = 0;
 
@@ -70,6 +70,8 @@ static unsigned currentScreen[gNumCubes]; //for keeping track of each cube's cur
 static unsigned currentScreenStore[gNumCubes] = { 0 };
 //sort of hacky/non-modular but it works for proof of concept @ev
 typedef Array<char[], gNumCubes> currentSearch; //array of character arrays
+
+UsbPipe <3, 4> usbPipe;
 
 
 
@@ -141,16 +143,8 @@ private:
 			}
 			else {
 				stackPointer = 0;
-				//return everyone to their originals 
-				if (stack[0] != -1) {
-					for (int i = 0; i < sizeof(stack); i++){
-						if (stack[i] != -1){
-						menus[stack[i]].init(v[flipped], &cubeAssets, menuStore[stack[i]].items);
-						PCubeID cube(stack[i]);
-						LOG("fixing cube number %d", cube);
-						}
-					}
-				}
+				//return everyone to their originals?
+				
 			}
 
 		}
@@ -213,6 +207,55 @@ void plusCube(unsigned id, struct MenuEvent e){
 	}
 }
 
+/* WRITE METHOD
+for sending messages through usb pipe
+based on usb sample code provided by sifteo*/
+void write(CubeID id, int msg){
+	usbPipe.attach();
+
+	if (Usb::isConnected() && usbPipe.writeAvailable()) {
+		UsbPacket &packet = usbPipe.sendQueue.reserve();
+		packet.setType(0);
+		packet.bytes()[0] = (uint8_t)69696969;
+		packet.bytes()[1] = (uint8_t)id;
+		packet.bytes()[2] = (uint8_t)msg;
+
+		LOG("Sending: %d bytes, type=%02x, data=%19h\n",
+			packet.size(), packet.type(), packet.bytes());
+
+		LOG("Should look like: %d, %d\n", (uint8_t)id, (uint8_t)msg);
+
+		usbPipe.sendQueue.commit();
+	}
+	usbPipe.detach();
+}
+
+/*LOCK CUBE HELPER METHOD
+also sends part info to surface*/
+void lockCube(unsigned id, struct MenuEvent e){
+	if (!flipped[id]){
+		if (locked[id]){
+			//unlock
+			LOG("current screen is %d\n", currentScreen[id]);
+			menus[id].init(v[id], &cubeAssets, menuStore[id].items);
+			menus[id].anchor(currentScreenStore[id]);
+			Sifteo::AudioChannel(0).play(WaterDrop);
+			locked[id] = false;
+			write(id, 11111111);
+		}
+		else {
+			currentScreenStore[id] = currentScreen[id];
+			static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
+			struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
+			menuStore[id].init(v[id], &cubeAssets, menus[id].items);
+			menus[id].init(v[id], &newAssets, newItems);
+			Sifteo::AudioChannel(0).play(WaterDrop);
+			locked[id] = true;
+			write(id, 00000000);
+		}
+	}
+}
+
 
 /* DO IT METHOD
 handles event cases, takes in Menu and MenuEvent parameters*/
@@ -223,26 +266,7 @@ void __declspec(noinline) doit(Menu &m, struct MenuEvent &e, unsigned id)
 		switch (e.type){
 
 			{ case MENU_ITEM_PRESS:
-				if (!flipped[id]){
-					if (locked[id]){
-						LOG("current screen is %d\n", currentScreen[id]);
-						menus[id].init(v[id], &cubeAssets, menuStore[id].items);
-						menus[id].anchor(currentScreenStore[id]);
-						Sifteo::AudioChannel(0).play(WaterDrop);
-						locked[id] = false;
-						break;
-					}
-					else {
-						currentScreenStore[id] = currentScreen[id];
-						static struct MenuAssets newAssets = { &NewBgTile, &newFooter, &newLabelEmpty, { NULL } };
-						struct MenuItem newItems[] = { menus[id].items[e.item], { NULL, NULL } };
-						menuStore[id].init(v[id], &cubeAssets, menus[id].items);
-						menus[id].init(v[id], &newAssets, newItems);
-						Sifteo::AudioChannel(0).play(WaterDrop);
-						locked[id] = true;
-						break;
-					}
-				}
+				lockCube(id, e);
 				break;
 			}
 
@@ -431,6 +455,8 @@ void main(){
 
 	static EventSensor event;
 	event.install();
+
+	usbPipe.attach();
 
 	struct MenuEvent e;
 

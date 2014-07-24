@@ -79,9 +79,9 @@ while True:
     """ b = (b + 1) % 100
     msg = bytes(b, 'utf-8')
     send(dev, msg) """
-    makemsg("your mom")
+    #makemsg("your mom")
 
     type, payload = receive(dev)
-    if len(payload) >= 3:
-       print(repr(payload[0] + ' ' + payload[1] + ' ' + payload[2]))
+    if len(payload) >= 1:
+        print(repr(payload[0]))
 

@@ -95,7 +95,7 @@ void main()
 
         for (unsigned n = 0; n < 60; n++) {
             readPacket();
-            writePacket();
+      //      writePacket();
             System::paint();
         }
 
