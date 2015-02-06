@@ -59,7 +59,7 @@ inline void Menu::handleItemPress()
 {
     MENU_LOG("Default handler: itemPress\n");
     // animate out icon
-    changeState(MENU_STATE_FINISH);
+    //changeState(MENU_STATE_FINISH);
 }
 
 inline void Menu::handleExit()

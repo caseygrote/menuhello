@@ -110,8 +110,9 @@ inline void Menu::init(VideoBuffer &vid, const MenuAssets *aAssets, MenuItem *aI
 
     position = 0.0f;
 
-    setIconYOffset(kDefaultIconYOffset);
-    setPeekTiles(kDefaultPeekTiles);
+	setIconYOffset(0); //so that the icon takes up the entire screen @ev
+   // setIconYOffset(kDefaultIconYOffset);
+    //setPeekTiles(kDefaultPeekTiles); //so that icon isnt obscured on the side @ev
 }
 
 inline VideoBuffer * Menu::videoBuffer() const
